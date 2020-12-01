@@ -1,0 +1,756 @@
+{
+  "kind": "books#volumes",
+  "totalItems": 352,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "rrzZDwAAQBAJ",
+      "etag": "rPBHWKLcUGQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/rrzZDwAAQBAJ",
+      "volumeInfo": {
+        "title": "경제시장 흐름을 읽는 눈, 경제기사 똑똑하게 읽기",
+        "authors": [
+          "강준형"
+        ],
+        "publisher": "다온북스",
+        "publishedDate": "2020-03-23",
+        "description": "빠르고 정확하게 경제 흐름을 파악하려면 어떻게 해야 할까? 그것은 바로 ‘경제기사를 읽는 것’이다. 경제기사를 읽으면 전 세계 경제 이슈를 파악하는 것은 물론 세계 경제 움직임과 시사상식 및 경제상식을 함께 키울 수 있다. 그래서 어릴 때부터 학교에서 신문 읽는 법이나 신문 활용법에 대해 알려주기도 한다. 이제 우리는 경제를 모르면 살기 힘든 세상에서 살고 있다. 어릴 때부터 용돈 기입장 쓰는 것, 심부름하는 것, 물건 사는 것 등 경제는 우리 생활의 모든 면과 연결되어 있으며, 자본주의에서 사는 현대인의 대화에서 ‘경제’ 이야기는 단골 소재가 되었다. 흔히 경제를 알려면 경제기사를 많이 읽어 보라고 말하지만, 경제를 모르는 사람들은 어떤 기사가 좋은 기사인지, 어떻게 읽으면 좋은지, 자주 쓰는 경제 용어에는 무엇이 있는지조차 알 수 없다. 그래서 기사를 읽기 전 기초 지식과 상식부터 쌓은 후 기사를 읽어야 한다. 이 책은 경제에 관심 있는 사람과 경제를 알고 싶은 사람을 위해 썼다. 독자의 이해를 돕고자 경제기사에서 우리가 알아야 하는 사실과 놓치기 쉬운 내용 등에 설명하고, 사실과 근거가 되는 도표와 그래프를 넣었다. 그래서 그동안 딱딱하고 어렵게 느꼈던 경제 전반에 대해 말랑말랑하고 부드럽게 이야기를 풀고 있다.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9791190149303"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Business & Economics"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.1.1.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=rrzZDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=rrzZDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=rrzZDwAAQBAJ&printsec=frontcover&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=1&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=rrzZDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=rrzZDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 11000,
+          "currencyCode": "KRW"
+        },
+        "retailPrice": {
+          "amount": 9900,
+          "currencyCode": "KRW"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=rrzZDwAAQBAJ&rdid=book-rrzZDwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 11000000000,
+              "currencyCode": "KRW"
+            },
+            "retailPrice": {
+              "amountInMicros": 9900000000,
+              "currencyCode": "KRW"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.kr/books/download/%EA%B2%BD%EC%A0%9C%EC%8B%9C%EC%9E%A5_%ED%9D%90%EB%A6%84%EC%9D%84_%EC%9D%BD%EB%8A%94_%EB%88%88_%EA%B2%BD%EC%A0%9C-sample-epub.acsm?id=rrzZDwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.kr/books/download/%EA%B2%BD%EC%A0%9C%EC%8B%9C%EC%9E%A5_%ED%9D%90%EB%A6%84%EC%9D%84_%EC%9D%BD%EB%8A%94_%EB%88%88_%EA%B2%BD%EC%A0%9C-sample-pdf.acsm?id=rrzZDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=rrzZDwAAQBAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "빠르고 정확하게 경제 흐름을 파악하려면 어떻게 해야 할까? 그것은 바로 ‘경제기사를 읽는 것’이다. 경제기사를 읽으면 전 세계 경제 이슈를 파악하는 것은 물론 세계 경제 ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "Lu7NDwAAQBAJ",
+      "etag": "aOX9wpb9XoU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/Lu7NDwAAQBAJ",
+      "volumeInfo": {
+        "title": "북한과 동북아 경제, 네트워크 개발 전략",
+        "subtitle": "Economic Development Strategy in North Korea and Northeast Asia",
+        "authors": [
+          "김두얼 Kim, Duol",
+          "류학수 Lyu, Haksu",
+          "이종민 Lee, Jongmin",
+          "新井洋史 Arai, Hirofumi",
+          "志田仁完 Shida, Yoshisada"
+        ],
+        "publisher": "도서출판 이조",
+        "publishedDate": "2019-10-09",
+        "description": "북한의 경제 개발은 어떠한 관점을 기반으로, 누구와 함께 그리고 어떻게 이루어져야 하는가? 북한은 경제 문제와 정치적·국제 관계적 문제가 얽힌 지역이며 한국과 중국, 러시아 등과 공간적으로 연결된 곳이다. 즉 규모 면에서는 결코 크지 않은 지역이지만 그 정치적·경제적 중요성은 세계에서도 유사한 예를 찾기 어려울 정도다. 따라서 북한 문제를 분석하기 위해서는 현재의 북한 모습뿐 아니라, 이런 상황에 이르게 한 근인(根因)을 정확히 이해해야 한다. 이 책의 전반부는 북한의 산업화와 경제 침체와 관련하여, 북한 기업의 조직과 공간 배치, 북한의 기업 관리제도의 변화를 논의하고 있다. 이는 북한 당국의 정책 결정에 있어 규모의 경제에 입각한 경제 효율성 제고보다 군사적 안전이 더 높은 우선순위를 차지했음을 의미한다. 후반부에는 최근 경제적 정체기를 겪고 있는 중국의 동북3성과 러시아의 극동지역 개발 노력을 분석하고 있다. 즉 북한 경제와의 연결성 증대로 인해 동북3성이 처한 경제부문의 대외적 돌파구로 작용할 수 있으며, 극동지역 개발은 러시아에게 서방의 경제 제재를 극복할 수 있는 정책 중의 하나로서 작용할 수 있음을 지적한다. 결국 중국과 러시아는 향후 비핵화 문제가 원활히 해결되어 북한 개발이 본격화될 경우 가장 중요한 협력 국가가 될 수 있음을 의미한다. 이 책에 담긴 북한의 철도와 기업 문제의 본격적인 고찰과 중국, 러시아와의 경제적 네트워크 연결 논의는 결국 한국 정부의 대북 경제정책에도 기여할 수 있을 것으로 기대한다. 한국 정부는 북한의 경제 개발을 위한 방안으로 ‘한반도 신경제지도 구상’을 제시하고 있다. 그리고 그 핵심 사업 중 하나는 남북한 철도 연결과 북한 철도의 현대화이다. 이는 한반도가 철도를 통해 중국 및 러시아와 연결됨으로써 한국의 ‘섬나라’ 철도망이 거대한 유라시아 대륙과 접속될 수 있다는 비전을 주고 있다. 또한 한국 정부는 ‘신북방정책’을 통해서 한반도 경제를 중국과 러시아, 그리고 유라시아 대륙과 연결시킨다는 구상을 발표했다.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9791187607267"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 240,
+        "printType": "BOOK",
+        "categories": [
+          "Business & Economics"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=Lu7NDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=Lu7NDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=Lu7NDwAAQBAJ&printsec=frontcover&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=2&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=Lu7NDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=Lu7NDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 12000,
+          "currencyCode": "KRW"
+        },
+        "retailPrice": {
+          "amount": 10800,
+          "currencyCode": "KRW"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=Lu7NDwAAQBAJ&rdid=book-Lu7NDwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 12000000000,
+              "currencyCode": "KRW"
+            },
+            "retailPrice": {
+              "amountInMicros": 10800000000,
+              "currencyCode": "KRW"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.kr/books/download/%EB%B6%81%ED%95%9C%EA%B3%BC_%EB%8F%99%EB%B6%81%EC%95%84_%EA%B2%BD%EC%A0%9C_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-sample-epub.acsm?id=Lu7NDwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.kr/books/download/%EB%B6%81%ED%95%9C%EA%B3%BC_%EB%8F%99%EB%B6%81%EC%95%84_%EA%B2%BD%EC%A0%9C_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-sample-pdf.acsm?id=Lu7NDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=Lu7NDwAAQBAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "북한의 경제 개발은 어떠한 관점을 기반으로, 누구와 함께 그리고 어떻게 이루어져야 하는가? 북한은 경제 문제와 정치적·국제 관계적 문제가 얽힌 지역이며 한국과 중국, 러시아 ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "S9XNxSberB4C",
+      "etag": "smk5CjbLKro",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/S9XNxSberB4C",
+      "volumeInfo": {
+        "title": "국립자유경제고등학교 세실고 3권",
+        "authors": [
+          "양혜석",
+          "타파리"
+        ],
+        "publisher": "대원씨아이",
+        "description": "청년 실업이 최대의 사회 문제로 대두되고, 대학진학만을 목표로 하는 기존 교육이 ‘생존 경쟁력’에는 하등의 도움이 되지 않는다는 지적이 힘을 얻으면서 ‘자력 생존이 가능한’ 젊은이 양성을 위한 특수목적고, 국립 세실자유경제고등학교가 설립된다. 입학과 동시에 모든 학생에게 천만원의 ‘입학금’이 지급되는 파격적인 조건. 그러나 잔고가 미달이면 퇴학이 되는 아찔한 상황! ‘먹고 살기 위한’ 고등학생들의 악전고투기!!",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PKEY:30272205"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 196,
+        "printType": "BOOK",
+        "categories": [
+          "Comics & Graphic Novels"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "comicsContent": true,
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=S9XNxSberB4C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=S9XNxSberB4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=S9XNxSberB4C&printsec=frontcover&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=3&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=S9XNxSberB4C&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=S9XNxSberB4C",
+        "seriesInfo": {
+          "kind": "books#volume_series_info",
+          "bookDisplayNumber": "3",
+          "volumeSeries": [
+            {
+              "seriesId": "1s3XFwAAABAA2M",
+              "seriesBookType": "COLLECTED_EDITION",
+              "orderNumber": 3
+            }
+          ]
+        }
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 2500,
+          "currencyCode": "KRW"
+        },
+        "retailPrice": {
+          "amount": 2250,
+          "currencyCode": "KRW"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=S9XNxSberB4C&rdid=book-S9XNxSberB4C&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 2500000000,
+              "currencyCode": "KRW"
+            },
+            "retailPrice": {
+              "amountInMicros": 2250000000,
+              "currencyCode": "KRW"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.kr/books/download/%EA%B5%AD%EB%A6%BD%EC%9E%90%EC%9C%A0%EA%B2%BD%EC%A0%9C%EA%B3%A0%EB%93%B1%ED%95%99%EA%B5%90_%EC%84%B8%EC%8B%A4%EA%B3%A0-sample-pdf.acsm?id=S9XNxSberB4C&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=S9XNxSberB4C&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "청년 실업이 최대의 사회 문제로 대두되고, 대학진학만을 목표로 하는 기존 교육이 ‘생존 경쟁력’에는 하등의 도움이 되지 않는다는 지적이 힘을 얻으면서 ‘자력 생존이 ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "d-_wDwAAQBAJ",
+      "etag": "iOCmJJW13vQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/d-_wDwAAQBAJ",
+      "volumeInfo": {
+        "title": "대전망 2016 대한민국 아시아 세계 경제 전문가 110명 심층 진단(체험판)",
+        "authors": [
+          "한경비즈니스"
+        ],
+        "publisher": "Hankyung BP",
+        "publishedDate": "2015-12-07",
+        "description": "이 책은 경영이론에 대한 전문서적이다.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788947592901"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "8947592900"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Business & Economics"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=d-_wDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=d-_wDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=d-_wDwAAQBAJ&printsec=frontcover&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=4&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=d-_wDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=d-_wDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 0,
+          "currencyCode": "KRW"
+        },
+        "retailPrice": {
+          "amount": 0,
+          "currencyCode": "KRW"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=d-_wDwAAQBAJ&rdid=book-d-_wDwAAQBAJ&rdot=1&source=gbs_api"
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "ALL_PAGES",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.kr/books/download/%EB%8C%80%EC%A0%84%EB%A7%9D_2016_%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD_%EC%95%84%EC%8B%9C%EC%95%84-sample-epub.acsm?id=d-_wDwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.kr/books/download/%EB%8C%80%EC%A0%84%EB%A7%9D_2016_%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD_%EC%95%84%EC%8B%9C%EC%95%84-sample-pdf.acsm?id=d-_wDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=d-_wDwAAQBAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "이 책은 경영이론에 대한 전문서적이다."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "T759PwAACAAJ",
+      "etag": "giLMrKYqIWs",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/T759PwAACAAJ",
+      "volumeInfo": {
+        "title": "경제 는 당신 이 대통령 이야",
+        "subtitle": "전 두환 시대 의 경제 비사",
+        "authors": [
+          "이장규"
+        ],
+        "publishedDate": "2008",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "8993027005"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9788993027006"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 502,
+        "printType": "BOOK",
+        "categories": [
+          "Korea (South)"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=T759PwAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=T759PwAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=T759PwAACAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=5&source=gbs_api",
+        "infoLink": "http://books.google.co.kr/books?id=T759PwAACAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%EA%B2%BD%EC%A0%9C_%EB%8A%94_%EB%8B%B9%EC%8B%A0_%EC%9D%B4_%EB%8C%80%ED%86%B5%EB%A0%B9_%EC%9D%B4%EC%95%BC.html?hl=&id=T759PwAACAAJ"
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=T759PwAACAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "r-1KAQAAIAAJ",
+      "etag": "K5FeaZ4SnnE",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/r-1KAQAAIAAJ",
+      "volumeInfo": {
+        "title": "나라 경제",
+        "publishedDate": "2009-12",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "STANFORD:36105215021242"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Korea (South)"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.1.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=r-1KAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=r-1KAQAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=r-1KAQAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=6&source=gbs_api",
+        "infoLink": "http://books.google.co.kr/books?id=r-1KAQAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%EB%82%98%EB%9D%BC_%EA%B2%BD%EC%A0%9C.html?hl=&id=r-1KAQAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=r-1KAQAAIAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "Z5e0AAAAIAAJ",
+      "etag": "nhfaGVidxTk",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/Z5e0AAAAIAAJ",
+      "volumeInfo": {
+        "title": "경제통계연보",
+        "publishedDate": "2002",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCSD:31822024979916"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Korea (South)"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.1.1.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=Z5e0AAAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=Z5e0AAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=Z5e0AAAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=7&source=gbs_api",
+        "infoLink": "http://books.google.co.kr/books?id=Z5e0AAAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%EA%B2%BD%EC%A0%9C%ED%86%B5%EA%B3%84%EC%97%B0%EB%B3%B4.html?hl=&id=Z5e0AAAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=Z5e0AAAAIAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "hNQuAAAAIAAJ",
+      "etag": "Yb3qdXLtDvw",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/hNQuAAAAIAAJ",
+      "volumeInfo": {
+        "title": "경제과학기술및정보공학의일체화과정과균형적발전",
+        "authors": [
+          "최중극"
+        ],
+        "publishedDate": "1991",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCAL:B3758964"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 119,
+        "printType": "BOOK",
+        "categories": [
+          "Information science"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "2.4.3.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=hNQuAAAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=hNQuAAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=hNQuAAAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=8&source=gbs_api",
+        "infoLink": "http://books.google.co.kr/books?id=hNQuAAAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%EA%B2%BD%EC%A0%9C%EA%B3%BC%ED%95%99%EA%B8%B0%EC%88%A0%EB%B0%8F%EC%A0%95%EB%B3%B4%EA%B3%B5%ED%95%99%EC%9D%98%EC%9D%BC.html?hl=&id=hNQuAAAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=hNQuAAAAIAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "9PRKAQAAIAAJ",
+      "etag": "uMB6TGpI9sQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/9PRKAQAAIAAJ",
+      "volumeInfo": {
+        "title": "KDI 북한 경제 리뷰",
+        "publishedDate": "2009",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "STANFORD:36105215017760"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "printType": "BOOK",
+        "categories": [
+          "Korea (North)"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.0.1.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=9PRKAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=9PRKAQAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=9PRKAQAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=9&source=gbs_api",
+        "infoLink": "http://books.google.co.kr/books?id=9PRKAQAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/KDI_%EB%B6%81%ED%95%9C_%EA%B2%BD%EC%A0%9C_%EB%A6%AC%EB%B7%B0.html?hl=&id=9PRKAQAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=9PRKAQAAIAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "NbqRAAAAIAAJ",
+      "etag": "bi7D8rjozEU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/NbqRAAAAIAAJ",
+      "volumeInfo": {
+        "title": "대외개방과국민경제",
+        "authors": [
+          "郭泰元"
+        ],
+        "publishedDate": "1992",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCSD:31822028075596"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 48,
+        "printType": "BOOK",
+        "categories": [
+          "Korea (South)"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.1.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=NbqRAAAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=NbqRAAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ko",
+        "previewLink": "http://books.google.co.kr/books?id=NbqRAAAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&cd=10&source=gbs_api",
+        "infoLink": "http://books.google.co.kr/books?id=NbqRAAAAIAAJ&dq=intitle:%EA%B2%BD%EC%A0%9C&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%EB%8C%80%EC%99%B8%EA%B0%9C%EB%B0%A9%EA%B3%BC%EA%B5%AD%EB%AF%BC%EA%B2%BD%EC%A0%9C.html?hl=&id=NbqRAAAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "KR",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "KR",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=NbqRAAAAIAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    }
+  ]
+}
