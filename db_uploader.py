@@ -7,9 +7,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "suwee.settings")
 django.setup()
 
 from user.models import User, UserBook
-from book.models import 
-from library.models import 
-from payment.models import 
+from book.models import Book, Category, Today, Like, Review
+from library.models import Library, LibraryBook
+from payment.models import Payment
 
 csv_path = './csv_data/users.csv'
 with open(csv_path) as csv_file:
@@ -63,6 +63,21 @@ with open(csv_path) as csv_file:
     for row in rows:
         Category.objects.create(name=row[0])
 
+
+csv_path = './csv_data/keywords.csv'
+with open(csv_path) as csv_file:
+    row = csv.reader(csv_file, delimiter=',')
+    next(rows)
+    for row in rows:
+        Keyword.objects.create(name=row[0])
+
+
+csv_path = './csv_data/today.csv'
+with open(csv_path) as csv_file:
+    row = csv.reader(csv_file, delimiter=',')
+    next(rows)
+    for row in rows:
+        Today.objects.create(book_id=row[0], description=row[1])
 
 csv_path = './csv_data/books.csv'
 with open(csv_path) as csv_file:
