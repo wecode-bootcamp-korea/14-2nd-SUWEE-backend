@@ -20,7 +20,7 @@ class Book(models.Model):
     subtitle          = models.CharField(max_length=45, null=True)
     image_url         = models.URLField(max_length=200)
     company           = models.CharField(max_length=45)
-    author            = models.CharField(max_length=45)
+    author            = models.CharField(max_length=200)
     about_author      = models.TextField(null=True)
     contents          = models.TextField(default='')
     company_review    = models.TextField(null=True)
