@@ -5,7 +5,7 @@ import hashlib
 import requests
 import json
 import datetime
-from random import randint
+from random             import randint
 
 from django.db          import models
 from django.utils       import timezone
@@ -16,12 +16,13 @@ import my_settings
 
 class User(models.Model):
     nickname     = models.CharField(max_length=45)
-    phone_number = models.CharField(max_length=11, null=True)
     password     = models.CharField(max_length=200, null=True)
     email        = models.EmailField(max_length=45, null=True)
     image_url    = models.URLField(max_length=200, null=True)
+    phone_number = models.CharField(max_length=11, null=True)
     created_at   = models.DateTimeField(auto_now_add=True)
     updated_at   = models.DateTimeField(auto_now=True)
+    kakao_id     = models.CharField(max_length=45, null=True)
     books        = models.ManyToManyField('book.Book', through='UserBook')
 
     class Meta :
@@ -32,7 +33,7 @@ class UserBook(models.Model):
     user        = models.ForeignKey(User, on_delete=models.CASCADE)
     book        = models.ForeignKey('book.Book', on_delete=models.CASCADE)
     page        = models.IntegerField()
-    time        = models.DurationField()
+    time        = models.IntegerField()
     created_at  = models.DateTimeField(auto_now_add=True)
     updated_at  = models.DateTimeField(auto_now=True)
 
