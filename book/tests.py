@@ -1,7 +1,8 @@
-from django.test import TestCase, Client
+from django.test           import TestCase, Client
+from unittest.mock         import patch, MagicMock
 
-from .models  import Book, Category, Review, Like
-from user.models import UserBook, User
+from .models               import Book, Category, Review, Like
+from user.models           import UserBook, User
 
 
 class BookDetailTestCase(TestCase):
@@ -93,3 +94,65 @@ class BookDetailTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),{'message':'NOT_EXIST_BOOK'})
 
+
+class CommingSoonBookTest(TestCase):
+
+    def setUp(self):
+        Book.objects.create(
+            id               = 1,
+            title            = '안녕 고맛나',
+            image_url        = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+            company          = "맛밤",
+            author           = "고수희",
+            page             = 804,
+            publication_date = "2020-12-10"
+        )
+
+        Book.objects.create(
+            id               = 2,
+            title            = '안녕 고밤톨',
+            image_url        = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+            company          = "밤나",
+            author           = "수희고",
+            page             = 829,
+            publication_date = "2020-12-31"
+        )
+
+    def tearDown(self):
+        Book.objects.all().delete()
+
+    def test_commingsoonbook_get_success(self):
+        client   = Client()
+        response = client.get('/books/commingsoon', content_type = 'application/json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),
+                         {
+                             "commingSoonBook":
+                             [{
+                                 "id"     : 1,
+                                 "title"  : "안녕 고맛나",
+                                 "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+                                 "author" : "고수희",
+                                 "date"   : 2
+                             },
+                                 {
+                                     "id"     : 2,
+                                     "title"  : "안녕 고밤톨",
+                                     "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+                                     "author" : "수희고",
+                                     "date"   : "12월31"
+                                 }]
+                         })
+
+    def test_commingsoonbook_get_not_found(self):
+        client = Client()
+        Book.objects.all().delete()
+
+        response = client.get('/books/commingsoon', content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(),
+                         {
+                             "message":"NO_BOOKS"
+                         }
+                        )
