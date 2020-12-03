@@ -14,12 +14,11 @@ with connection.cursor() as cursor:
     cursor.execute('truncate books')
     cursor.execute('truncate categories')
     cursor.execute('truncate libraries')
-    cursor.execute('truncate libraies_books')
+    cursor.execute('truncate library_books')
     cursor.execute('truncate likes')
     cursor.execute('truncate reviews')
     cursor.execute('truncate users')
-    cursor.execute('truncate users_books')
-
+    cursor.execute('truncate user_books')
     cursor.execute('set foreign_key_checks=1')
 
 print ('데이터 베이스 초기화')

@@ -275,3 +275,6 @@ tags
 #
 my_settings.py
 *.csv
+csv_data/
+*.csv
+settings.json
