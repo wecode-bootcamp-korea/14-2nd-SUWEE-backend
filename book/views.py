@@ -26,6 +26,7 @@ class RecentlyBookView(View):
             .order_by('-publication_date')[:int(limit)])]
         return JsonResponse({"oneMonthBook":books}, status=200)
 
+
 class BookDetailView(View):
     def get(self, request, book_id):
         try :
@@ -49,3 +50,29 @@ class BookDetailView(View):
         except Book.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_BOOK'}, status=400)
 
+
+class CommingSoonBookView(View):
+    def get (self, request):
+        day    = request.GET.get('day', '30')
+        limit  = request.GET.get('limit', '10')
+
+        today            = date.today()
+        next_publication = today + timedelta(days=int(day))
+        min_day          = today + timedelta(days=1)
+        max_day          = today + timedelta(days=5)
+
+        book_list = [{
+            "id"     : book.id,
+            "title"  : book.title,
+            "image"  : book.image_url,
+            "author" : book.author,
+            "date"   : (book.publication_date - today).days
+                if min_day <= book.publication_date <= max_day
+                else book.publication_date.strftime('%m월%d')
+        } for book in (Book.objects.filter(
+            publication_date__range=[min_day, next_publication]).order_by
+            ('publication_date')[:int(limit)])]
+
+        if not book_list:
+            return JsonResponse({"message":"NO_BOOKS"}, status=400)
+        return JsonResponse({"commingSoonBook":book_list}, status=200)
