@@ -1,23 +1,20 @@
 import json
-from datetime import timedelta, date
+from datetime         import timedelta, date
 
-from django.views       import View
-from django.db          import transaction
-from django.db.models   import Q
-from django.http        import JsonResponse
+from django.views     import View
+from django.db        import transaction
+from django.db.models import Q, Count
+from django.http      import JsonResponse
 
 from .models          import (
-        Book,
-        Category,
-        Keyword,
-        Today,
-        Review,
-        Like,
+    Book,
+    Category,
+    Keyword,
+    Today,
+    Review,
+    Like,
 )
-from library.models   import (
-        Library,
-        LibraryBook,
-)
+from library.models   import Library, LibraryBook
 from user.models      import UserBook
 from .modules.numeric import get_reading_numeric
 
@@ -33,11 +30,9 @@ class RecentlyBookView(View):
             "title"  : book.title,
             "image"  : book.image_url,
             "author" : book.author
-            } for book in (Book.objects.filter(
-                            publication_date__range=[previous_days,today])
-                            .order_by('-publication_date')[:int(limit)]
-                        )
-        ]
+        } for book in (Book.objects.filter(
+            publication_date__range=[previous_days,today])
+            .order_by('-publication_date')[:int(limit)])]
 
         return JsonResponse({"oneMonthBook":books}, status=200)
 
@@ -65,6 +60,7 @@ class BookDetailView(View):
         except Book.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_BOOK'}, status=400)
 
+
 class CommingSoonBookView(View):
     def get (self, request):
         day    = request.GET.get('day', '30')
@@ -90,6 +86,7 @@ class CommingSoonBookView(View):
         if not book_list:
             return JsonResponse({"message":"NO_BOOKS"}, status=400)
         return JsonResponse({"commingSoonBook":book_list}, status=200)
+
 
 class SearchBookView(View):
     def get(self, request):
@@ -118,6 +115,7 @@ class SearchBookView(View):
             return JsonResponse({"message":"SUCCESS", "books":json_data}, status=200)
 
         return JsonResponse({"message":"INVALID_REQUEST"}, status=400)
+
 
 class ReviewView(View):
     def post(self, request, book_id):
@@ -167,6 +165,7 @@ class ReviewView(View):
         except Review.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_REVIEW'}, status=400)
 
+
 class ReviewLikeView(View):
     def patch(self, request):
         data = json.loads(request.body)
@@ -182,3 +181,31 @@ class ReviewLikeView(View):
         except Like.DoesNotExist:
             Like.objects.create(user_id=user_id, review_id=review_id)
             return JsonResponse({'message':'SUCCESS'}, status=200)
+
+
+class BestSellerBookView(View):
+    def get (self, request):
+        keyword = request.GET.get('keyword', '1')
+        limit   = request.GET.get('limit', '10')
+
+        if int(keyword) in range(2,7):
+           books =  UserBook.objects.select_related('book').filter(
+               book__keyword_id=int(keyword)).annotate(count=Count(
+                   'book_id')).order_by('-count')[:int(limit)]
+           if not books:
+               return JsonResponse ({"message" : "NO_BOOKS"}, status = 400)
+
+        else:
+           books =  UserBook.objects.select_related('book').filter(
+               book__keyword_id__gte=2).annotate(count=Count(
+                   'book_id')).order_by('-count')[:int(limit)]
+           if not books:
+               return JsonResponse ({"message" : "NO_BOOKS"}, status = 400)
+
+        book_list = [{
+            "id"     : book.book.id,
+            "title"  : book.book.title,
+            "image"  : book.book.image_url,
+            "author" : book.book.author
+        } for book in books]
+        return JsonResponse ({"bestSellerBook":book_list}, status=200)
