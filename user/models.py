@@ -96,3 +96,4 @@ class SMSAuthRequest(TimeStampedModel):
         modified__gte = time_limit
         )
         return result.exists()
+
