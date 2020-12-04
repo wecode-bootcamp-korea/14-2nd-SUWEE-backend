@@ -19,6 +19,7 @@ with connection.cursor() as cursor:
     cursor.execute('truncate reviews')
     cursor.execute('truncate users')
     cursor.execute('truncate user_books')
+    cursor.execute('truncate keywords')
     cursor.execute('set foreign_key_checks=1')
 
 print ('데이터 베이스 초기화')

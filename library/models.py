@@ -4,7 +4,7 @@ class Library(models.Model):
     user       = models.ForeignKey('user.User', on_delete=models.CASCADE)
     name       = models.CharField(max_length=45)
     image_url  = models.URLField(max_length=200)
-    book      = models.ManyToManyField('book.Book', through='LibraryBook')
+    book       = models.ManyToManyField('book.Book', through='LibraryBook')
 
     class Meta:
         db_table = 'libraries'

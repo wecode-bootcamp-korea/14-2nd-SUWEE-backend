@@ -41,12 +41,6 @@ class Today(models.Model):
     class Meta:
         db_table = 'today'
 
-class Like(models.Model):
-    review = models.ForeignKey('Review', on_delete=models.CASCADE)
-    user = models.ForeignKey('user.User', on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'likes'
 
 class Review(models.Model):
     user        = models.ForeignKey('user.User', on_delete=models.CASCADE)
@@ -57,4 +51,11 @@ class Review(models.Model):
 
     class Meta:
         db_table = 'reviews'
+
+class Like(models.Model):
+    review = models.ForeignKey('Review', on_delete=models.CASCADE)
+    user = models.ForeignKey('user.User', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'likes'
 

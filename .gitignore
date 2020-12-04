@@ -278,3 +278,5 @@ my_settings.py
 csv_data/
 *.csv
 settings.json
+db_uploader
+db_truncate
