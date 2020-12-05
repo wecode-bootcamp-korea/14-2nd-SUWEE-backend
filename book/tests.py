@@ -1,12 +1,12 @@
 import json, jwt
+
 from unittest.mock    import patch, MagicMock
 from datetime         import datetime
-
 from django.test      import TestCase, Client
-from user.models      import UserBook, User
 
 from .models          import Book, Category, Review, Like, Keyword, Today
 from user.models      import UserBook, User
+from library.models   import Library, LibraryBook
 from .modules.numeric import get_reading_numeric
 
 import my_settings
@@ -132,6 +132,7 @@ class CommingSoonBookTest(TestCase):
             page             = 829,
             publication_date = "2020-12-31"
         )
+
     def tearDown(self):
         Book.objects.all().delete()
 
@@ -226,6 +227,85 @@ class RecentlyBookTest(TestCase):
         Book.objects.all().delete()
 
         response = client.get('/books/recently', content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(),
+                         {
+                             "message":"NO_BOOKS"
+                         }
+                        )
+
+
+class RecommendBookTest(TestCase):
+
+    def setUp(self):
+        Keyword.objects.create(
+            id   = 1,
+            name = "종합"
+        )
+
+        Keyword.objects.create(
+            id   = 2,
+            name = "고양이"
+        )
+
+        Book.objects.create(
+            id                   = 1,
+            title                = '안녕 고맛나',
+            image_url            = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+            company              = "맛밤",
+            author               = "고수희",
+            page                 = 804,
+            publication_date     = "2020-12-07",
+            keyword_id           = 2
+            )
+
+        User.objects.create(
+            id       = 1,
+            nickname = "burgundy"
+        )
+
+        Library.objects.create(
+            id        = 1,
+            user_id   = 1,
+            name      = "이사갈 서재",
+            image_url = "https://files.slack.com/files-tmb/TH0U6FBTN-F01G8AKDEGN-b883ff5e83/1600907077321_720.jpg"
+        )
+
+        LibraryBook.objects.create(
+            id         = 1,
+            library_id = 1,
+            book_id    = 1
+        )
+
+    def tearDown(self):
+        Keyword.objects.all().delete()
+        Book.objects.all().delete()
+        User.objects.all().delete()
+        Library.objects.all().delete()
+        LibraryBook.objects.all().delete()
+
+    def test_recommendbook_get_success(self):
+        client   = Client()
+
+        response = client.get('/books/recommend', content_type = 'application/json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),
+                         {
+                             "recommendBook":
+                             [{
+                                 "id"            : 1,
+                                 "image"         : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+                                 "title"         : "안녕 고맛나",
+                                 "author"        : "고수희"
+                             }]
+                         })
+
+    def test_recommendbook_get_not_found(self):
+        client = Client()
+        Book.objects.all().delete()
+
+        response = client.get('/books/recommend', content_type='application/json')
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),
@@ -659,7 +739,6 @@ class BestSellerBookTest(TestCase):
             page    = 800,
             time    = 100
         )
-
 
     def tearDown(self):
         Keyword.objects.all().delete()
