@@ -1,5 +1,6 @@
 import json
 import pendulum
+import datetime
 from datetime         import timedelta, date
 
 from django.views     import View
@@ -7,16 +8,10 @@ from django.db        import transaction
 from django.db.models import Q, Count
 from django.http      import JsonResponse
 
-from .models          import (
-    Book,
-    Category,
-    Keyword,
-    Today,
-    Review,
-    Like,
-)
+from .models          import Book, Category, Keyword, Today, Review, Like
 from library.models   import Library, LibraryBook
 from user.models      import UserBook
+
 from .modules.numeric import get_reading_numeric
 
 
@@ -244,3 +239,35 @@ class BestSellerBookView(View):
             "author" : book.book.author
         } for book in books]
         return JsonResponse ({"bestSellerBook":book_list}, status=200)
+
+
+class RecommendBookView(View):
+    def get (self, request):
+        keyword    = request.GET.get('keyword', '2')
+        limit      = request.GET.get('limit', '6')
+
+        today_iso  = datetime.datetime.now().isocalendar()
+        year       = today_iso[0]
+        week       = today_iso[1]
+        day        = today_iso[2]
+
+        week_start = date.fromisocalendar(year, week, 1)
+        now        = datetime.datetime.now()
+
+        books =  LibraryBook.objects.prefetch_related('book_set').filter(
+            created_at__range=[week_start, now], book__keyword_id=int(
+                keyword)).values('book_id', 'book__title', 'book__image_url',
+                                'book__author').annotate(count=Count(
+                    'book_id')).order_by('-count')[:int(limit)]
+
+        book_list =[
+            {
+                "id": book.get('book_id'),
+                "title" : book.get('book__title'),
+                "image" : book.get('book__image_url'),
+                "author" : book.get('book__author')
+            } for book in books]
+
+        if not book_list:
+            return JsonResponse ({"message" : "NO_BOOKS"}, status=400)
+        return JsonResponse ({"recommendBook":book_list}, status=200)
