@@ -5,7 +5,7 @@ from datetime         import datetime
 from django.test      import TestCase, Client
 from user.models      import UserBook, User
 
-from .models          import Book, Category, Review, Like, Keyword
+from .models          import Book, Category, Review, Like, Keyword, Today
 from user.models      import UserBook, User
 from .modules.numeric import get_reading_numeric
 import my_settings
@@ -642,5 +642,107 @@ class BestSellerBookTest(TestCase):
         self.assertEqual(response.json(),
                          {
                              "message":"NO_BOOKS"
+                         }
+                        )
+
+
+class TodayBookTest(TestCase):
+
+    def setUp(self):
+
+        Book.objects.create(
+            id                   = 1,
+            title                = '안녕 고맛나',
+            image_url            = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+            company              = "맛밤",
+            author               = "고수희",
+            page                 = 804,
+            publication_date     = "2020-12-07",
+            )
+
+        Book.objects.create(
+            id               = 2,
+            title            = '안녕 고밤톨',
+            image_url        = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+            company          = "밤나",
+            author           = "수희고",
+            page             = 829,
+            publication_date = "2020-12-06"
+        )
+
+        User.objects.create(
+            id       = 1,
+            nickname = "burgundy"
+        )
+
+        User.objects.create(
+            id       = 2,
+            nickname = "ordinalist"
+        )
+
+        Today.objects.create(
+            id          = 1,
+            book_id     = 1,
+            description = "올해 70세 고맛나 에세이",
+            pick_date    = "2020-12-09"
+        )
+
+        Review.objects.create(
+            id       = 1,
+            user_id  = 1,
+            book_id  = 1,
+            contents = "맛나야 오래 함께하자"
+        )
+
+        Review.objects.create(
+            id       = 2,
+            user_id  = 2,
+            book_id  = 1,
+            contents = "세기의 명작"
+        )
+
+        Like.objects.create(
+            id        = 1,
+            user_id   = 2,
+            review_id = 1,
+        )
+
+    def tearDown(self):
+        Book.objects.all().delete()
+        User.objects.all().delete()
+        Today.objects.all().delete()
+        Review.objects.all().delete()
+        Like.objects.all().delete()
+
+    def test_todaybook_get_success(self):
+        client   = Client()
+        response = client.get('/books/today', content_type = 'application/json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),
+                         {
+                             "todayBook":
+                             [{
+                                 "id"            : 1,
+                                 "image"         : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+                                 "title"         : "안녕 고맛나",
+                                 "author"        : "고수희",
+                                 "description"   : "올해 70세 고맛나 에세이",
+                                 "reviewerName"  : "burgundy",
+                                 "reviewerImage" : '',
+                                 "reviewContent" : "맛나야 오래 함께하자"
+                             }]
+                         })
+
+    def test_todaybook_get_not_found(self):
+        client = Client()
+        Book.objects.all().delete()
+
+        response = client.get('/books/today', content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(),
+                         {
+                             "message":"NO_BOOK"
                          }
                         )

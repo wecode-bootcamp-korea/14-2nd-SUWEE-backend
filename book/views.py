@@ -1,4 +1,5 @@
 import json
+import pendulum
 from datetime         import timedelta, date
 
 from django.views     import View
@@ -17,6 +18,36 @@ from .models          import (
 from library.models   import Library, LibraryBook
 from user.models      import UserBook
 from .modules.numeric import get_reading_numeric
+
+
+class TodayBookView(View):
+    def get (self, request):
+
+        today = date.today().strftime('%Y-%m-%d')
+        today_book =  Book.objects.prefetch_related(
+            'review_set','review_set__like_set').filter(today__pick_date=today)
+
+        if not today_book.exists():
+            return JsonResponse({"message":"NO_BOOK"}, status = 400)
+
+        today_review = today_book.first().review_set.prefetch_related(
+            'like_set').values('user__nickname', 'user__image_url',
+                               'contents').annotate(count=Count(
+                                   'likes')).order_by('-count')[:1].first()
+
+        book = [{
+            "id"             : book.id,
+            "title"          : book.title,
+            "image"          : book.image_url,
+            "author"         : book.author,
+            "description"    : book.today_set.get(book_id=book).description,
+            "reviewerName"   : today_review.get('user__nickname'),
+            "reviewerImage"  : today_review.get('user__image_url')
+                if today_review.get('user__image_url') is not None
+                else '',
+            "reviewContent"  : today_review.get('contents'),
+        } for book in today_book]
+        return JsonResponse({"todayBook":book}, status = 200)
 
 
 class RecentlyBookView(View):
