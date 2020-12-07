@@ -4,18 +4,24 @@ from unittest.mock  import patch, MagicMock
 
 from django.test import TestCase, Client
 
-from .models import User
+from .models import (
+        User,
+        SMSAuthRequest,
+)
+from .views  import SMSCheckView
 
 
 class UserTest(TestCase):
     def setUp(self):
         client = Client()
 
+        SMSAuthRequest.objects.create(phone_number='01011112222')
         password = bcrypt.hashpw('12345678'.encode('utf-8'), bcrypt.gensalt())
         User.objects.create(phone_number='01011112222', password = password.decode(), nickname='test_user')
 
     def tearDown(self):
         User.objects.all().delete()
+        SMSAuthRequest.objects.all().delete()
 
     def test_user_signup_post_success(self):
         body = {
@@ -184,3 +190,10 @@ class UserTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+    def test_user_smscheck_get_success(self):
+        sms_info = SMSAuthRequest.objects.get(phone_number='01011112222')
+        response = self.client.get('/user/authSMS', {'phone_number':'01011112222','auth_number':sms_info.auth_number }) 
+        
+        self.assertEqual(response.json(), {"message":"SUCCESS", "result":True})
+        self.assertEqual(response.status_code, 200)
+     

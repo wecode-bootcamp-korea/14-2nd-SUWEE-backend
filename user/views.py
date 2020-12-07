@@ -13,6 +13,7 @@ from django.shortcuts   import redirect
 from .models import (
     User,
     UserBook,
+    SMSAuthRequest,
 )
 
 import my_settings
@@ -122,4 +123,29 @@ class SignInWithKakaoView(View):
 
         except KeyError:
             return JsonResponse({"message":"KEY_ERROR"}, status=400)
+
+class SMSCheckView(View):
+    @transaction.atomic
+    def post(self, request):
+        try:
+            data    = json.loads(request.body)
+            phone_number = data['phone_number']
+            SMSAuthRequest.objects.update_or_create(phone_number=phone_number)
+
+            return JsonResponse({'message': 'SUCCESS'}, status=201)
+
+        except KeyError:
+            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+
+    def get(self, request):
+        try:
+            phone_number = request.GET.get('phone_number', '')
+            auth_number  = request.GET.get('auth_number', 0)
+            result       = SMSAuthRequest.check_auth_number(phone_number, auth_number)
+
+            return JsonResponse({'message': 'SUCCESS', 'result': result}, status=200)
+
+        except KeyError:
+            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+
 
