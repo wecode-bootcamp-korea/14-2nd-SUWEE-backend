@@ -275,3 +275,9 @@ tags
 #
 my_settings.py
 *.csv
+csv_data/
+*.csv
+settings.json
+db_uploader.py
+db_truncate.py
+
