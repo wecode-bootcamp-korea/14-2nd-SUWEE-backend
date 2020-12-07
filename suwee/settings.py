@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
  #    'django.contrib.admin',
-    'django.contrib.auth',
+ #    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -82,10 +82,7 @@ WSGI_APPLICATION = 'suwee.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = my_settings.DATABASES
-SECRET_KEY = my_settings.SECRET_KEY
-
-
-
+SECRET_KEY = my_settings.SECRET_KEY['secret']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

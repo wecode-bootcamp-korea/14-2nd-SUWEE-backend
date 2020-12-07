@@ -5,10 +5,11 @@ import hashlib
 import requests
 import json
 import datetime
-from random             import randint
+from random import randint
 
-from django.db          import models
-from django.utils       import timezone
+from django.db      import models
+from django.utils   import timezone
+
 from model_utils.models import TimeStampedModel
 
 import my_settings
@@ -40,10 +41,9 @@ class UserBook(models.Model):
     class Meta :
         db_table = 'user_books'
 
-
 class SMSAuthRequest(TimeStampedModel):
-    phone_number = models.CharField(verbose_name='휴대폰 번호', primary_key = True, max_length = 50)
-    auth_number  = models.IntegerField(verbose_name= '인증 번호')
+    phone_number = models.CharField(verbose_name='휴대폰 번호', primary_key=True, max_length=50)
+    auth_number  = models.IntegerField(verbose_name='인증 번호')
 
     class Meta:
         db_table = 'sms_auth_requests'
@@ -51,7 +51,7 @@ class SMSAuthRequest(TimeStampedModel):
     def save(self, *args, **kwargs):
         self.auth_number = randint(100000, 1000000)
         super().save(*args, **kwargs)
-        self.send_sms() # 인증번호가 담긴 SMS를 전송
+        self.send_sms()
 
     def send_sms(self):
         url = 'https://sens.apigw.ntruss.com'
@@ -85,15 +85,16 @@ class SMSAuthRequest(TimeStampedModel):
         string        = bytes(string, 'UTF-8')
         string_hmac   = hmac.new(secret_key, string, digestmod = hashlib.sha256).digest()
         string_base64 = base64.b64encode(string_hmac).decode('UTF-8')
+        
         return string_base64
 
     @classmethod
     def check_auth_number(cls, p_num, c_num):
         time_limit    = timezone.now() - datetime.timedelta(minutes = 5)
         result        = cls.objects.filter(
-        phone_number  = p_num,
-        auth_number   = c_num,
-        modified__gte = time_limit
-        )
+                            phone_number  = p_num,
+                            auth_number   = c_num,
+                            modified__gte = time_limit
+                        )
         return result.exists()
 
