@@ -8,6 +8,7 @@ from user.models      import UserBook, User
 from .models          import Book, Category, Review, Like, Keyword, Today
 from user.models      import UserBook, User
 from .modules.numeric import get_reading_numeric
+
 import my_settings
 
 
@@ -131,7 +132,6 @@ class CommingSoonBookTest(TestCase):
             page             = 829,
             publication_date = "2020-12-31"
         )
-
     def tearDown(self):
         Book.objects.all().delete()
 
@@ -164,6 +164,69 @@ class CommingSoonBookTest(TestCase):
         Book.objects.all().delete()
 
         response = client.get('/books/commingsoon', content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(),
+                         {
+                             "message":"NO_BOOKS"
+                         }
+                        )
+
+
+class RecentlyBookTest(TestCase):
+
+    def setUp(self):
+        Book.objects.create(
+            id               = 1,
+            title            = '안녕 고맛나',
+            image_url        = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+            company          = "맛밤",
+            author           = "고수희",
+            page             = 804,
+            publication_date = "2020-12-07"
+        )
+
+        Book.objects.create(
+            id               = 2,
+            title            = '안녕 고밤톨',
+            image_url        = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+            company          = "밤나",
+            author           = "수희고",
+            page             = 829,
+            publication_date = "2020-12-06"
+        )
+
+    def tearDown(self):
+        Book.objects.all().delete()
+
+    def test_recentlybook_get_success(self):
+        client   = Client()
+        response = client.get('/books/recently', content_type = 'application/json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),
+                         {
+                             "oneMonthBook":
+                             [{
+                                 "id"     : 1,
+                                 "title"  : "안녕 고맛나",
+                                 "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+                                 "author" : "고수희",
+                             },
+                                 {
+                                     "id"     : 2,
+                                     "title"  : "안녕 고밤톨",
+                                     "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+                                     "author" : "수희고",
+                                 }]
+                         })
+
+    def test_recentlybook_get_not_found(self):
+        client = Client()
+        Book.objects.all().delete()
+
+        response = client.get('/books/recently', content_type='application/json')
+
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),
                          {
@@ -210,6 +273,10 @@ class BookTest(TestCase):
         self.assertEqual(data['expected_reading_minutes'], 260)                            
         self.assertEqual(data['category_avg_finish'], 3/7 * 100)                          
         self.assertEqual(data['category_expected_reading_minutes'], int((260+230+90)/3)) 
+        self.assertEqual(data['avg_finish'], 25.0)
+        self.assertEqual(data['expected_reading_minutes'], 260)
+        self.assertEqual(data['category_avg_finish'], 3/7 * 100)
+        self.assertEqual(data['category_expected_reading_minutes'], int((260+230+90)/3))
 
     def test_get_numeric_reading_not_exist(self):
         data = get_reading_numeric(-1)

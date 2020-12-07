@@ -52,19 +52,23 @@ class TodayBookView(View):
 
 class RecentlyBookView(View):
     def get (self, request):
-        day            = request.GET.get('day')
-        limit          = request.GET.get('limit', '20')
+        day    = request.GET.get('day', '30')
+        limit  = request.GET.get('limit', '10')
+
         today          = date.today()
         previous_days  = today - timedelta(days=int(day))
 
         books = [{
+            "id"     : book.id,
             "title"  : book.title,
             "image"  : book.image_url,
             "author" : book.author
-        } for book in (Book.objects.filter(
-            publication_date__range=[previous_days,today])
-            .order_by('-publication_date')[:int(limit)])]
+            } for book in (Book.objects.filter(
+                publication_date__range=[previous_days,today])
+                .order_by('-publication_date')[:int(limit)])]
 
+        if not books:
+            return JsonResponse({"message":"NO_BOOKS"}, status=400)
         return JsonResponse({"oneMonthBook":books}, status=200)
 
 
@@ -126,20 +130,20 @@ class SearchBookView(View):
                 'title__icontains'   : request.GET.get('title', ''),
                 'company__icontains' : request.GET.get('company', ''),
         }
-                
+
         or_conditions = Q()
 
         for key, value in conditions.items():
             if value:
-                or_conditions.add(Q(**{key: value}), Q.OR) 
-        
+                or_conditions.add(Q(**{key: value}), Q.OR)
+
         if or_conditions:
             json_data = list(
                             Book.objects.filter(or_conditions).values(
-                                'id', 
-                                'author', 
-                                'title', 
-                                'image_url', 
+                                'id',
+                                'author',
+                                'title',
+                                'image_url',
                                 'company'
                                 )
                         )
