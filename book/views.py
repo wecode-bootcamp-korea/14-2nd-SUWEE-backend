@@ -1,19 +1,31 @@
 import json
-from datetime       import timedelta, date
+from datetime import timedelta, date
 
-from django.views   import View
-from django.http    import JsonResponse
+from django.views       import View
+from django.db          import transaction
+from django.db.models   import Q
+from django.http        import JsonResponse
 
-from .models        import Book, Category, Keyword, Today, Review, Like
-from library.models import Library, LibraryBook
-from user.models    import UserBook
+from .models          import (
+        Book,
+        Category,
+        Keyword,
+        Today,
+        Review,
+        Like,
+)
+from library.models   import (
+        Library, 
+        LibraryBook,
+)
+from user.models      import UserBook
+from .modules.numeric import get_reading_numeric
 
 
 class RecentlyBookView(View):
     def get (self, request):
-        day    = request.GET.get('day')
-        limit  = request.GET.get('limit', '20')
-
+        day            = request.GET.get('day')
+        limit          = request.GET.get('limit', '20')
         today          = date.today()
         previous_days  = today - timedelta(days=int(day))
 
@@ -21,9 +33,12 @@ class RecentlyBookView(View):
             "title"  : book.title,
             "image"  : book.image_url,
             "author" : book.author
-        } for book in (Book.objects.filter(
-            publication_date__range=[previous_days,today])
-            .order_by('-publication_date')[:int(limit)])]
+            } for book in (Book.objects.filter(
+                            publication_date__range=[previous_days,today])
+                            .order_by('-publication_date')[:int(limit)]
+                        )
+        ]
+
         return JsonResponse({"oneMonthBook":books}, status=200)
 
 
@@ -50,7 +65,6 @@ class BookDetailView(View):
         except Book.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_BOOK'}, status=400)
 
-
 class CommingSoonBookView(View):
     def get (self, request):
         day    = request.GET.get('day', '30')
@@ -76,3 +90,32 @@ class CommingSoonBookView(View):
         if not book_list:
             return JsonResponse({"message":"NO_BOOKS"}, status=400)
         return JsonResponse({"commingSoonBook":book_list}, status=200)
+
+class SearchBookView(View):
+    def get(self, request):
+        conditions = {
+                'author__icontains'  : request.GET.get('author', ''),
+                'title__icontains'   : request.GET.get('title', ''),
+                'company__icontains' : request.GET.get('company', ''),
+        }
+                
+        or_conditions = Q()
+
+        for key, value in conditions.items():
+            if value:
+                or_conditions.add(Q(**{key: value}), Q.OR) 
+        
+        if or_conditions:
+            json_data = list(
+                            Book.objects.filter(or_conditions).values(
+                                'id', 
+                                'author', 
+                                'title', 
+                                'image_url', 
+                                'company'
+                                )
+                        )
+            return JsonResponse({"message":"SUCCESS", "books":json_data}, status=200)
+
+        return JsonResponse({"message":"INVALID_REQUEST"}, status=400)
+        
