@@ -1,3 +1,11 @@
-from django.shortcuts import render
+import json
+from iamport import Iamport
 
-# Create your views here.
+from django.views import View
+from django.http  import JsonResponse
+
+from share.decorators import check_auth_decorator
+
+class PaymaneView(View):
+    @check_auth_decorator
+    def post(self, request):

@@ -8,6 +8,8 @@ from library.models   import Library, LibraryBook
 from book.models      import Book
 from user.models      import User
 
+from share.decorators import check_auth_decorator
+
 class MyLibraryView(View):
     @check_auth_decorator
     def post(self,request):
@@ -24,6 +26,7 @@ class MyLibraryView(View):
                     name    = nickname
                 )
                 return JsonResponse({'message':'CREATED_LIBRARY'}, status=200)
+
             if LibraryBook.objects.filter(book_id=book_id, library_id=library.first().id).exists():
                 return JsonResponse({'message':'ALREADY_BOOK'}, status=400)
             book_save  = LibraryBook.objects.create(

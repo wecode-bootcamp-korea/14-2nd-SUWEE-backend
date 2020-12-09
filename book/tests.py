@@ -4,13 +4,25 @@ from unittest.mock    import patch, MagicMock
 from datetime         import datetime
 from django.test      import TestCase, Client
 
-from .models          import Book, Category, Review, Like, Keyword, Today
-from user.models      import UserBook, User
 from library.models   import Library, LibraryBook
-from .modules.numeric import get_reading_numeric
 
 import my_settings
 
+from .models            import (
+        Book,
+        Category,
+        Review,
+        Like,
+        Keyword,
+        Today
+)
+from user.models        import (
+        User,
+        UserBook,
+)
+from .modules.numeric   import (
+        get_reading_numeric,
+)
 
 class BookDetailTestCase(TestCase):
     maxDiff = None
@@ -331,7 +343,8 @@ class BookTest(TestCase):
         Book.objects.create(id=3, title='광수 생각', page=250, author="김광수", publication_date=datetime.now(), category_id=1, company='(주)늘빛')
         Book.objects.create(id=4, title='결전! 주식투자 2020', page=600, author="마광수", publication_date=datetime.now(), category_id=1, company='(주)한빛IT')
         Book.objects.create(id=5, title='니가 날?', page=100, author="마광수", publication_date=datetime.now(), category_id=2, company='ABCD')
-        
+
+
         UserBook.objects.bulk_create([
             UserBook(user_id=1, book_id=1, page=129, time=130),
             UserBook(user_id=2, book_id=1, page=300, time=260),
@@ -350,10 +363,6 @@ class BookTest(TestCase):
     def test_get_numeric_reading_success(self):
         data = get_reading_numeric(1)
 
-        self.assertEqual(data['avg_finish'], 25.0)                                          
-        self.assertEqual(data['expected_reading_minutes'], 260)                            
-        self.assertEqual(data['category_avg_finish'], 3/7)                          
-        self.assertEqual(data['category_expected_reading_minutes'], int((260+230+90)/3)) 
         self.assertEqual(data['avg_finish'], 25.0)
         self.assertEqual(data['expected_reading_minutes'], 260)
         self.assertEqual(data['category_avg_finish'], 3/7 * 100)
@@ -375,11 +384,10 @@ class BookTest(TestCase):
                         }
                     )
         datas    = response.json()['books']
-        
         for data in datas:
             result = target in data['title'] or target in data['author'] or target in data['company']
             self.assertTrue(result)
-     
+
     def test_get_searched_books_with_author(self):
         target   = '고수희'
         response = self.client.get(
@@ -387,7 +395,7 @@ class BookTest(TestCase):
                         {'author':target}
                     )
         datas    = response.json()['books']
-       
+
         self.assertEqual(len(datas), 1)
         self.assertEqual(datas[0]['title'], '그렇게 개발자가 되어간다')
 
@@ -401,7 +409,7 @@ class BookTest(TestCase):
 
         self.assertEqual(len(datas), 1)
         self.assertEqual(datas[0]['title'], '결전! 주식투자 2020')
-    
+
     def test_get_searched_books_with_company(self):
         target   = '빛'
         response = self.client.get(
@@ -414,7 +422,7 @@ class BookTest(TestCase):
         self.assertEqual(datas[0]['company'], '늘빛출판사')
         self.assertEqual(datas[1]['company'], '(주)늘빛')
         self.assertEqual(datas[2]['company'], '(주)한빛IT')
-        
+
     def test_get_searched_books_invalid_request(self):
         response = self.client.get(
                         '/books/search',  
@@ -423,7 +431,6 @@ class BookTest(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {"message":"INVALID_REQUEST"})
-
 
 class ReviewTestCase(TestCase):
     def setUp(self):
@@ -569,7 +576,6 @@ class ReviewTestCase(TestCase):
         response = self.client.delete('/books/1/review?review_id=1', **{'HTTP_Authorization':token})
         self.assertEqual(response.json(),{'message':'NOT_THIS_USER'})
         self.assertEqual(response.status_code, 400)
-
 
 class ReviewLikeTestCase(TestCase):
     def setUp(self):

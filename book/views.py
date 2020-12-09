@@ -7,10 +7,20 @@ from django.db        import transaction
 from django.db.models import Q, Count
 from django.http      import JsonResponse
 
-from .models          import Book, Category, Keyword, Today, Review, Like
 from library.models   import Library, LibraryBook
+from .models          import (
+        Book,
+        Category,
+        Keyword,
+        Today,
+        Review,
+        Like,
+)
+from library.models   import (
+        Library,
+        LibraryBook,
+)
 from user.models      import UserBook
-
 from .modules.numeric import get_reading_numeric
 
 
@@ -145,7 +155,6 @@ class SearchBookView(View):
 
         return JsonResponse({"message":"INVALID_REQUEST"}, status=400)
 
-
 class ReviewView(View):
     def post(self, request, book_id):
         data = json.loads(request.body)
@@ -169,7 +178,6 @@ class ReviewView(View):
         try:
             user_id = data['user_id']
             reviews = Review.objects.select_related('user').get(user_id=user_id)
-            reviews = Review.objects.select_related('user').filter(user_id=user_id)
             review_list = [{
                 'review_id'  : review.id,
                 'nick_name'  : review.user.nickname,
@@ -194,7 +202,6 @@ class ReviewView(View):
         except Review.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_REVIEW'}, status=400)
 
-
 class ReviewLikeView(View):
     def patch(self, request):
         data = json.loads(request.body)
@@ -210,7 +217,6 @@ class ReviewLikeView(View):
         except Like.DoesNotExist:
             Like.objects.create(user_id=user_id, review_id=review_id)
             return JsonResponse({'message':'SUCCESS'}, status=200)
-
 
 class BestSellerBookView(View):
     def get (self, request):

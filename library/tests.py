@@ -116,6 +116,26 @@ class MyLibraryTestCase(TestCase):
         }
 
         response = self.client.post(self.URL, request, content_type='application/json', **self.header)
+        self.assertEqual(response.json(),{'book_save': 'SUCCESS'})
+        self.assertEqual(response.status_code, 200)
+
+    def test_library_book_post_not_exist_user(self):
+        request = {
+            'user_id'    : 0,
+            'book_id'    : self.book.id,
+        }
+
+        response = self.client.post(self.URL, request, content_type='application/json')
+        self.assertEqual(response.json()['message'],'NOT_EXIST_LIBRARY')
+        self.assertEqual(response.status_code, 400)
+
+    def test_library_book_post_already_book(self):
+        request = {
+            'user_id'    : self.user.id,
+            'book_id'    : self.book.id
+        }
+
+        response = self.client.post(self.URL, request, content_type='application/json')
         self.assertEqual(response.json()['message'],'ALREADY_BOOK')
         self.assertEqual(response.status_code, 400)
 
@@ -124,4 +144,11 @@ class MyLibraryTestCase(TestCase):
         response = self.client.post(self.URL, content_type='application/json', **self.header)
         self.assertEqual(response.json()['message'] ,'INVAILD_KEYS')
         self.assertEqual(response.status_code, 400)
+        response = self.client.post(self.URL, content_type='application/json')
+        self.assertEqual(response.json()['message'] ,'INVAILD_KEYS')
+        self.assertEqual(response.status_code, 400)
+
+
+
+
 
