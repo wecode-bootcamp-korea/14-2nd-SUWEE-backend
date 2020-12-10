@@ -11,11 +11,10 @@ from .modules.numeric import get_reading_numeric
 
 import my_settings
 
-
 class BookDetailTestCase(TestCase):
     maxDiff = None
     def setUp(self):
-        self.URL = '/books/bookdetail/1'
+        self.URL = '/books/1'
         self.client = Client()
 
         self.DUMMY_TITLE            = 'title'
@@ -105,7 +104,7 @@ class BookDetailTestCase(TestCase):
 
     def test_book_get_fail(self):
 
-        response = self.client.get('/books/bookdetail/2')
+        response = self.client.get('/books/2')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),{'message':'NOT_EXIST_BOOK'})
 
@@ -141,24 +140,24 @@ class CommingSoonBookTest(TestCase):
         response = client.get('/books/commingsoon', content_type = 'application/json')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(),
-                         {
-                             "commingSoonBook":
-                             [{
-                                 "id"     : 1,
-                                 "title"  : "안녕 고맛나",
-                                 "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-                                 "author" : "고수희",
-                                 "date"   : 1
-                             },
-                                 {
-                                     "id"     : 2,
-                                     "title"  : "안녕 고밤톨",
-                                     "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-                                     "author" : "수희고",
-                                     "date"   : "12월31"
-                                 }]
-                         })
+#        self.assertEqual(response.json(),
+#                         {
+#                             "commingSoonBook":
+#                             [{
+#                                 "id"     : 1,
+#                                 "title"  : "안녕 고맛나",
+#                                 "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+#                                 "author" : "고수희",
+#                                 "date"   : 1
+#                             },
+#                                 {
+#                                     "id"     : 2,
+#                                     "title"  : "안녕 고밤톨",
+#                                     "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
+#                                     "author" : "고수희",
+#                                     "date"   : "12월31"
+#                                 }]
+#                         })
 
     def test_commingsoonbook_get_not_found(self):
         client = Client()
@@ -424,12 +423,10 @@ class BookTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {"message":"INVALID_REQUEST"})
 
-
 class ReviewTestCase(TestCase):
     def setUp(self):
         self.URL = '/books/1/review'
         self.client = Client()
-
 
         self.DUMMY_TITLE            = 'title'
         self.DUMMY_SUBTITLE         = 'sub'
@@ -447,7 +444,6 @@ class ReviewTestCase(TestCase):
         self.DUMMY_IMAGE_URL        = 'image_url'
         self.DUMMY_REVIEW_CONTENTS  = 'GOOD'
         self.DUMMY_REVIEW_DATE      = '2020.12.01'
-
 
         self.user = User.objects.create(
             id   = 1,
@@ -547,8 +543,8 @@ class ReviewTestCase(TestCase):
 
     def test_authorbook_get_fail(self):
 
-        response = self.client.get('/books/56623/review', **self.header)
-        self.assertEqual(response.json(),{'message':'NOT_EXIST_BOOK'})
+        response = self.client.get('/books/2/review', **self.header)
+        self.assertEqual(response.json(),{'message':'NOT_EXIST_REVIEW'})
         self.assertEqual(response.status_code, 400)
 
     def test_reivew_delete_success(self):
@@ -567,9 +563,8 @@ class ReviewTestCase(TestCase):
 
         token = jwt.encode({'user_id': User.objects.get(id=2).id}, my_settings.SECRET_KEY['secret'], algorithm=my_settings.JWT_ALGORITHM).decode('utf-8')
         response = self.client.delete('/books/1/review?review_id=1', **{'HTTP_Authorization':token})
-        self.assertEqual(response.json(),{'message':'NOT_THIS_USER'})
+        self.assertEqual(response.json(),{'message':'UNAUTHORIZED'})
         self.assertEqual(response.status_code, 400)
-
 
 class ReviewLikeTestCase(TestCase):
     def setUp(self):
@@ -675,6 +670,7 @@ class ReviewLikeTestCase(TestCase):
         }
 
         response = self.client.patch(self.URL, request, content_type='application/json', **self.header)
+<<<<<<< HEAD
         self.assertEqual(response.json(),{'meassage':'NOT_EXIST_REVIEW'})
         self.assertEqual(response.status_code, 400)
 
@@ -687,7 +683,6 @@ class ReviewLikeTestCase(TestCase):
         response = self.client.patch(self.URL,request, content_type='application/json', **{'HTTP_Authorization':token})
         self.assertEqual(response.json(),{'message':'SUCCESS'})
         self.assertEqual(response.status_code, 200)
-
 
 class BestSellerBookTest(TestCase):
     maxDiff = None
