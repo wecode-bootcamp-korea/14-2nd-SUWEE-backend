@@ -3,10 +3,11 @@ import json, requests
 from django.http      import JsonResponse
 from django.views     import View
 
-from share.decorators import check_auth_decorator
 from library.models   import Library, LibraryBook
 from book.models      import Book
 from user.models      import User
+from share.decorators import check_auth_decorator
+
 
 class MyLibraryView(View):
     @check_auth_decorator
@@ -33,3 +34,30 @@ class MyLibraryView(View):
             return JsonResponse({'book_save':'SUCCESS'}, status=200)
         except KeyError:
             return JsonResponse({'message':'INVAILD_KEYS'}, status=400)
+
+
+class LibraryBookListView(View):
+    @check_auth_decorator
+    def get(self, request):
+        user_id  = request.user
+        ordering = request.GET.get('ordering', '1')
+
+        conditions = {
+            1 : '-created_at',
+            2 : 'book__title',
+            3 : 'book_author',
+            4 : '-book_publication_date'
+        }
+
+        books = LibraryBook.objects.select_related(
+            'book','library').filter(
+                library__user_id=user_id).order_by(conditions[int(ordering)])
+
+        book_list = {
+            "libraryBook" : [{
+                "id"     : library.book.id,
+                "title"  : library.book.title,
+                "image"  : library.book.image_url,
+                "author" : library.book.author
+            } for library in books]}
+        return JsonResponse (book_list, status = 200)
