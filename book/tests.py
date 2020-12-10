@@ -130,7 +130,7 @@ class CommingSoonBookTest(TestCase):
             company          = "맛밤",
             author           = "고수희",
             page             = 804,
-            publication_date = "2020-12-10"
+            publication_date = "2020-12-11"
         )
 
         Book.objects.create(
@@ -191,13 +191,14 @@ class BookTest(TestCase):
         User.objects.create(id=4, nickname='test4')
 
         category = Category.objects.create(id=1, name='소설')
+        Category.objects.create(id=2, name='수필')
 
         Book.objects.create(id=1, title='문은 닫혔다', page=300, author="김문주", publication_date=datetime.now(), category_id=1, company='늘빛출판사')
         Book.objects.create(id=2, title='그렇게 개발자가 되어간다', page=500, author="고수희", publication_date=datetime.now(), category_id=1, company='(주)위고두다')
         Book.objects.create(id=3, title='광수 생각', page=250, author="김광수", publication_date=datetime.now(), category_id=1, company='(주)늘빛')
         Book.objects.create(id=4, title='결전! 주식투자 2020', page=600, author="마광수", publication_date=datetime.now(), category_id=1, company='(주)한빛IT')
-
-
+        Book.objects.create(id=5, title='니가 날?', page=100, author="마광수", publication_date=datetime.now(), category_id=2, company='ABCD')
+        
         UserBook.objects.bulk_create([
             UserBook(user_id=1, book_id=1, page=129, time=130),
             UserBook(user_id=2, book_id=1, page=300, time=260),
@@ -206,19 +207,19 @@ class BookTest(TestCase):
             UserBook(user_id=1, book_id=2, page=500, time=230),
             UserBook(user_id=1, book_id=3, page=250, time=90),
             UserBook(user_id=1, book_id=4, page=351, time=120),
+            UserBook(user_id=1, book_id=5, page=0, time=0),
         ])
-
 
     def tearDown(self):
         Book.objects.all().delete()
         Category.objects.all().delete()
 
     def test_get_numeric_reading_success(self):
-        data = get_reading_numeric(Book.objects.get(id=1))
+        data = get_reading_numeric(1)
 
         self.assertEqual(data['avg_finish'], 25.0)                                          
         self.assertEqual(data['expected_reading_minutes'], 260)                            
-        self.assertEqual(data['category_avg_finish'], 3/7 * 100)                          
+        self.assertEqual(data['category_avg_finish'], 3/7)                          
         self.assertEqual(data['category_expected_reading_minutes'], int((260+230+90)/3)) 
 
     def test_get_numeric_reading_not_exist(self):
