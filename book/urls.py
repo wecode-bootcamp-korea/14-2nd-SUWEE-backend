@@ -1,14 +1,15 @@
 from django.urls     import path
-from .views          import (
-    TodayBookView,
-    RecentlyBookView,
-    BookDetailView,
-    SearchBookView,
-    CommingSoonBookView,
-    BestSellerBookView,
-    RecommendBookView,
-    ReviewView,
-    ReviewLikeView
+
+from .views import (
+        RecentlyBookView,
+        BookDetailView,
+        SearchBookView,
+        CommingSoonBookView,
+        ReviewView,
+        ReviewLikeView,
+        BestSellerBookView,
+        TodayBookView,
+        RecommendBookView
 )
 
 urlpatterns = [

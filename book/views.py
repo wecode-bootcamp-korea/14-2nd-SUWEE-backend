@@ -7,18 +7,28 @@ from django.db        import transaction
 from django.db.models import Q, Count
 from django.http      import JsonResponse
 
-from .models          import Book, Category, Keyword, Today, Review, Like
-from library.models   import Library, LibraryBook
+from .models          import (
+    Book,
+    Category,
+    Keyword,
+    Today,
+    Review,
+    Like,
+)
+from library.models   import (
+        Library,
+        LibraryBook,
+)
 from user.models      import UserBook
 
 from .modules.numeric import get_reading_numeric
-
+from share.decorators import check_auth_decorator
 
 class TodayBookView(View):
     def get (self, request):
 
-        today = date.today().strftime('%Y-%m-%d')
-        today_book =  Book.objects.prefetch_related(
+        today      = date.today().strftime('%Y-%m-%d')
+        today_book = Book.objects.prefetch_related(
             'review_set','review_set__like_set').filter(today__pick_date=today)
 
         if not today_book.exists():
@@ -65,7 +75,6 @@ class RecentlyBookView(View):
             return JsonResponse({"message":"NO_BOOKS"}, status=400)
         return JsonResponse({"oneMonthBook":books}, status=200)
 
-
 class BookDetailView(View):
     def get(self, request, book_id):
         try :
@@ -85,10 +94,9 @@ class BookDetailView(View):
                 'review_count'     : book.review_set.count(),
                 'reder'            : book.userbook_set.count()
                 }
-            return JsonResponse({'book_detail':book_detail}, status=200)
+            return JsonResponse({'book_detail':book_detail, 'like':False}, status=200)
         except Book.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_BOOK'}, status=400)
-
 
 class CommingSoonBookView(View):
     def get (self, request):
@@ -125,8 +133,6 @@ class SearchBookView(View):
                 'company__icontains' : request.GET.get('company', ''),
         }
 
-        or_conditions = Q()
-
         for key, value in conditions.items():
             if value:
                 or_conditions.add(Q(**{key: value}), Q.OR)
@@ -145,12 +151,35 @@ class SearchBookView(View):
 
         return JsonResponse({"message":"INVALID_REQUEST"}, status=400)
 
+class BookDetailView(View):
+    def get(self, request, book_id):
+        try :
+            book = Book.objects.select_related('category').prefetch_related('review_set').get(id=book_id)
+            book_detail = {
+                'title'            : book.title,
+                'subtitle'         : book.subtitle,
+                'image_url'        : book.image_url,
+                'company'          : book.company,
+                'author'           : book.author,
+                'contents'         : book.contents,
+                'company_review'   : book.company_review,
+                'page'             : book.page,
+                'publication_date' : book.publication_date,
+                'description'      : book.description,
+                'category'         : book.category.name,
+                'review_count'     : book.review_set.count(),
+                'reder'            : book.userbook_set.count()
+                }
+            return JsonResponse({'book_detail':book_detail}, status=200)
+        except Book.DoesNotExist:
+            return JsonResponse({'message':'NOT_EXIST_BOOK'}, status=400)
 
 class ReviewView(View):
+    @check_auth_decorator
     def post(self, request, book_id):
         data = json.loads(request.body)
         try :
-            user_id  = data['user_id']
+            user_id  = request.user
             contents = data['contents']
 
             if len(contents) < 200:
@@ -165,11 +194,8 @@ class ReviewView(View):
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
 
     def get(self, request, book_id):
-        data = json.loads(request.body)
         try:
-            user_id = data['user_id']
-            reviews = Review.objects.select_related('user').get(user_id=user_id)
-            reviews = Review.objects.select_related('user').filter(user_id=user_id)
+            reviews = Book.objects.get(id=book_id).review_set.all()
             review_list = [{
                 'review_id'  : review.id,
                 'nick_name'  : review.user.nickname,
@@ -181,32 +207,32 @@ class ReviewView(View):
         except Review.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_REVIEW'}, status=400)
 
+    @check_auth_decorator
     def delete(self, request, book_id):
-        data = json.loads(request.body)
         try :
-            user_id = data['user_id']
+            user_id   = request.user
             review_id = request.GET['review_id']
-            review  = Review.objects.get(id=review_id)
+            review    = Review.objects.get(id=review_id)
             if review.user_id == user_id:
                 review.delete()
-                return JsonResponse({'meassage':'SUCCESS'}, status=200)
-            return JsonResponse({'meassage':'UNAUTHORIZED'}, status=400)
+                return JsonResponse({'message':'SUCCESS'}, status=200)
+            return JsonResponse({'message':'UNAUTHORIZED'}, status=400)
         except Review.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_REVIEW'}, status=400)
 
-
 class ReviewLikeView(View):
+    @check_auth_decorator
     def patch(self, request):
         data = json.loads(request.body)
         try:
-            user_id    = data['user_id']
+            user_id    = request.user
             review_id  = data['review_id']
 
             if Review.objects.filter(id=review_id).exists():
                 like = Like.objects.get(user_id=user_id, review_id=review_id)
                 like.delete()
-                return JsonResponse({'message':'CANCEL'}, status=200)
-            return JsonResponse({'meassage':'NOT_EXIST_REVIEW'}, status=400)
+                return JsonResponse({'message':'CANCEL', 'like':False}, status=200)
+            return JsonResponse({'message':'NOT_EXIST_REVIEW'}, status=400)
         except Like.DoesNotExist:
             Like.objects.create(user_id=user_id, review_id=review_id)
             return JsonResponse({'message':'SUCCESS'}, status=200)
@@ -261,9 +287,9 @@ class RecommendBookView(View):
 
         book_list =[
             {
-                "id": book.get('book_id'),
-                "title" : book.get('book__title'),
-                "image" : book.get('book__image_url'),
+                "id"     : book.get('book_id'),
+                "title"  : book.get('book__title'),
+                "image"  : book.get('book__image_url'),
                 "author" : book.get('book__author')
             } for book in books]
 

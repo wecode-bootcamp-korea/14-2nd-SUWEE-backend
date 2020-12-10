@@ -1,21 +1,31 @@
-import json, jwt
-
-from unittest.mock    import patch, MagicMock
-from datetime         import datetime
-from django.test      import TestCase, Client
-
-from .models          import Book, Category, Review, Like, Keyword, Today
-from user.models      import UserBook, User
-from library.models   import Library, LibraryBook
-from .modules.numeric import get_reading_numeric
+import json,jwt
+from unittest.mock  import patch, MagicMock
+from datetime       import datetime
+from django.test import TestCase, Client
 
 import my_settings
 
+from user.models import UserBook, User
 
+from .models            import (
+        Book,
+        Category,
+        Review,
+        Like
+)
+from user.models        import (
+        User,
+        UserBook,
+)
+from .modules.numeric   import (
+        get_reading_numeric,
+)
+
+ 
 class BookDetailTestCase(TestCase):
     maxDiff = None
     def setUp(self):
-        self.URL = '/books/bookdetail/1'
+        self.URL = '/books/1'
         self.client = Client()
 
         self.DUMMY_TITLE            = 'title'
@@ -105,7 +115,7 @@ class BookDetailTestCase(TestCase):
 
     def test_book_get_fail(self):
 
-        response = self.client.get('/books/bookdetail/2')
+        response = self.client.get('/books/2')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),{'message':'NOT_EXIST_BOOK'})
 
@@ -120,7 +130,7 @@ class CommingSoonBookTest(TestCase):
             company          = "맛밤",
             author           = "고수희",
             page             = 804,
-            publication_date = "2020-12-11"
+            publication_date = "2020-12-10"
         )
 
         Book.objects.create(
@@ -165,155 +175,12 @@ class CommingSoonBookTest(TestCase):
         Book.objects.all().delete()
 
         response = client.get('/books/commingsoon', content_type='application/json')
-
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),
                          {
                              "message":"NO_BOOKS"
                          }
-                        )
-
-
-class RecentlyBookTest(TestCase):
-
-    def setUp(self):
-        Book.objects.create(
-            id               = 1,
-            title            = '안녕 고맛나',
-            image_url        = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-            company          = "맛밤",
-            author           = "고수희",
-            page             = 804,
-            publication_date = "2020-12-07"
-        )
-
-        Book.objects.create(
-            id               = 2,
-            title            = '안녕 고밤톨',
-            image_url        = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-            company          = "밤나",
-            author           = "수희고",
-            page             = 829,
-            publication_date = "2020-12-06"
-        )
-
-    def tearDown(self):
-        Book.objects.all().delete()
-
-    def test_recentlybook_get_success(self):
-        client   = Client()
-        response = client.get('/books/recently', content_type = 'application/json')
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(),
-                         {
-                             "oneMonthBook":
-                             [{
-                                 "id"     : 1,
-                                 "title"  : "안녕 고맛나",
-                                 "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-                                 "author" : "고수희",
-                             },
-                                 {
-                                     "id"     : 2,
-                                     "title"  : "안녕 고밤톨",
-                                     "image"  : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-                                     "author" : "수희고",
-                                 }]
-                         })
-
-    def test_recentlybook_get_not_found(self):
-        client = Client()
-        Book.objects.all().delete()
-
-        response = client.get('/books/recently', content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(),
-                         {
-                             "message":"NO_BOOKS"
-                         }
-                        )
-
-
-class RecommendBookTest(TestCase):
-
-    def setUp(self):
-        Keyword.objects.create(
-            id   = 1,
-            name = "종합"
-        )
-
-        Keyword.objects.create(
-            id   = 2,
-            name = "고양이"
-        )
-
-        Book.objects.create(
-            id                   = 1,
-            title                = '안녕 고맛나',
-            image_url            = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-            company              = "맛밤",
-            author               = "고수희",
-            page                 = 804,
-            publication_date     = "2020-12-07",
-            keyword_id           = 2
-            )
-
-        User.objects.create(
-            id       = 1,
-            nickname = "burgundy"
-        )
-
-        Library.objects.create(
-            id        = 1,
-            user_id   = 1,
-            name      = "이사갈 서재",
-            image_url = "https://files.slack.com/files-tmb/TH0U6FBTN-F01G8AKDEGN-b883ff5e83/1600907077321_720.jpg"
-        )
-
-        LibraryBook.objects.create(
-            id         = 1,
-            library_id = 1,
-            book_id    = 1
-        )
-
-    def tearDown(self):
-        Keyword.objects.all().delete()
-        Book.objects.all().delete()
-        User.objects.all().delete()
-        Library.objects.all().delete()
-        LibraryBook.objects.all().delete()
-
-    def test_recommendbook_get_success(self):
-        client   = Client()
-
-        response = client.get('/books/recommend', content_type = 'application/json')
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(),
-                         {
-                             "recommendBook":
-                             [{
-                                 "id"            : 1,
-                                 "image"         : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-                                 "title"         : "안녕 고맛나",
-                                 "author"        : "고수희"
-                             }]
-                         })
-
-    def test_recommendbook_get_not_found(self):
-        client = Client()
-        Book.objects.all().delete()
-
-        response = client.get('/books/recommend', content_type='application/json')
-
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(),
-                         {
-                             "message":"NO_BOOKS"
-                         }
-                        )
-
+                         )
 
 class BookTest(TestCase):
     def setUp(self):
@@ -354,10 +221,6 @@ class BookTest(TestCase):
         self.assertEqual(data['expected_reading_minutes'], 260)                            
         self.assertEqual(data['category_avg_finish'], 3/7)                          
         self.assertEqual(data['category_expected_reading_minutes'], int((260+230+90)/3)) 
-        self.assertEqual(data['avg_finish'], 25.0)
-        self.assertEqual(data['expected_reading_minutes'], 260)
-        self.assertEqual(data['category_avg_finish'], 3/7 * 100)
-        self.assertEqual(data['category_expected_reading_minutes'], int((260+230+90)/3))
 
     def test_get_numeric_reading_not_exist(self):
         data = get_reading_numeric(-1)
@@ -424,12 +287,10 @@ class BookTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {"message":"INVALID_REQUEST"})
 
-
 class ReviewTestCase(TestCase):
     def setUp(self):
         self.URL = '/books/1/review'
         self.client = Client()
-
 
         self.DUMMY_TITLE            = 'title'
         self.DUMMY_SUBTITLE         = 'sub'
@@ -448,7 +309,7 @@ class ReviewTestCase(TestCase):
         self.DUMMY_REVIEW_CONTENTS  = 'GOOD'
         self.DUMMY_REVIEW_DATE      = '2020.12.01'
 
-
+ 
         self.user = User.objects.create(
             id   = 1,
             nickname  = self.DUMMY_NICKNAME,
@@ -567,9 +428,8 @@ class ReviewTestCase(TestCase):
 
         token = jwt.encode({'user_id': User.objects.get(id=2).id}, my_settings.SECRET_KEY['secret'], algorithm=my_settings.JWT_ALGORITHM).decode('utf-8')
         response = self.client.delete('/books/1/review?review_id=1', **{'HTTP_Authorization':token})
-        self.assertEqual(response.json(),{'message':'NOT_THIS_USER'})
+        self.assertEqual(response.json(),{'message':'UNAUTHORIZED'})
         self.assertEqual(response.status_code, 400)
-
 
 class ReviewLikeTestCase(TestCase):
     def setUp(self):
@@ -675,7 +535,7 @@ class ReviewLikeTestCase(TestCase):
         }
 
         response = self.client.patch(self.URL, request, content_type='application/json', **self.header)
-        self.assertEqual(response.json(),{'meassage':'NOT_EXIST_REVIEW'})
+        self.assertEqual(response.json(),{'message':'NOT_EXIST_REVIEW'})
         self.assertEqual(response.status_code, 400)
 
     def test_reviewlike_patch_success(self):
@@ -689,207 +549,3 @@ class ReviewLikeTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class BestSellerBookTest(TestCase):
-    maxDiff = None
-    def setUp(self):
-
-        Keyword.objects.create(
-            id   = 1,
-            name = "종합"
-        )
-
-        Keyword.objects.create(
-            id   = 2,
-            name = "고양이"
-        )
-
-        Book.objects.create(
-            id                   = 1,
-            title                = '안녕 고맛나',
-            image_url            = "https://bit.ly/372JmcX",
-            company              = "맛밤",
-            author               = "고수희",
-            page                 = 804,
-            publication_date     = "2020-12-07",
-            keyword_id           = 2
-        )
-
-        Book.objects.create(
-            id               = 2,
-            title            = '안녕 고밤톨',
-            image_url        = "https://bit.ly/372JmcX",
-            company          = "밤나",
-            author           = "수희고",
-            page             = 829,
-            publication_date = "2020-12-06",
-        )
-
-        User.objects.create(
-            id       = 1,
-            nickname = "burgundy"
-        )
-
-        User.objects.create(
-            id       = 2,
-            nickname = "ordinalist"
-        )
-
-        UserBook.objects.create(
-            user_id = 1,
-            book_id = 1,
-            page    = 800,
-            time    = 100
-        )
-
-    def tearDown(self):
-        Keyword.objects.all().delete()
-        Book.objects.all().delete()
-        User.objects.all().delete()
-        UserBook.objects.all().delete()
-
-    def test_bestsellerbook_get_success_keyword_1(self):
-        client   = Client()
-        response = client.get('/books/bestseller', content_type = 'application/json')
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(),
-                         {
-                             "bestSellerBook":
-                             [{
-                                 "id"     : 1,
-                                 "image"  : "https://bit.ly/372JmcX",
-                                 "title"  : "안녕 고맛나",
-                                 "author" : "고수희"
-                            }
-                             ]})
-
-    def test_bestsellerbook_get_success_keyword_2_or_more(self):
-        client   = Client()
-        response = client.get('/books/bestseller?keyword=2', content_type = 'application/json')
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(),
-                         {
-                             "bestSellerBook":
-                             [{
-                                 "id"     : 1,
-                                 "image"  : "https://bit.ly/372JmcX",
-                                 "title"  : "안녕 고맛나",
-                                 "author" : "고수희"
-                             }
-                             ]})
-
-    def test_bestsellerbook_get_not_found(self):
-        client = Client()
-        Book.objects.all().delete()
-
-        response = client.get('/books/bestseller', content_type='application/json')
-
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(),
-                         {
-                             "message":"NO_BOOKS"
-                         }
-                        )
-
-
-class TodayBookTest(TestCase):
-
-    def setUp(self):
-
-        Book.objects.create(
-            id                   = 1,
-            title                = '안녕 고맛나',
-            image_url            = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-            company              = "맛밤",
-            author               = "고수희",
-            page                 = 804,
-            publication_date     = "2020-12-07",
-            )
-
-        Book.objects.create(
-            id               = 2,
-            title            = '안녕 고밤톨',
-            image_url        = "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-            company          = "밤나",
-            author           = "수희고",
-            page             = 829,
-            publication_date = "2020-12-06"
-        )
-
-        User.objects.create(
-            id       = 1,
-            nickname = "burgundy"
-        )
-
-        User.objects.create(
-            id       = 2,
-            nickname = "ordinalist"
-        )
-
-        Today.objects.create(
-            id          = 1,
-            book_id     = 1,
-            description = "올해 70세 고맛나 에세이",
-            pick_date    = "2020-12-09"
-        )
-
-        Review.objects.create(
-            id       = 1,
-            user_id  = 1,
-            book_id  = 1,
-            contents = "맛나야 오래 함께하자"
-        )
-
-        Review.objects.create(
-            id       = 2,
-            user_id  = 2,
-            book_id  = 1,
-            contents = "세기의 명작"
-        )
-
-        Like.objects.create(
-            id        = 1,
-            user_id   = 2,
-            review_id = 1,
-        )
-
-    def tearDown(self):
-        Book.objects.all().delete()
-        User.objects.all().delete()
-        Today.objects.all().delete()
-        Review.objects.all().delete()
-        Like.objects.all().delete()
-
-    def test_todaybook_get_success(self):
-        client   = Client()
-        response = client.get('/books/today', content_type = 'application/json')
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(),
-                         {
-                             "todayBook":
-                             [{
-                                 "id"            : 1,
-                                 "image"         : "https://files.slack.com/files-pri/TH0U6FBTN-F01FTD2A9E3/20201205_140246.jpg",
-                                 "title"         : "안녕 고맛나",
-                                 "author"        : "고수희",
-                                 "description"   : "올해 70세 고맛나 에세이",
-                                 "reviewerName"  : "burgundy",
-                                 "reviewerImage" : '',
-                                 "reviewContent" : "맛나야 오래 함께하자"
-                             }]
-                         })
-
-    def test_todaybook_get_not_found(self):
-        client = Client()
-        Book.objects.all().delete()
-
-        response = client.get('/books/today', content_type='application/json')
-
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(),
-                         {
-                             "message":"NO_BOOK"
-                         }
-                        )
