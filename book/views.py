@@ -8,12 +8,22 @@ from django.db        import transaction
 from django.db.models import Q, Count
 from django.http      import JsonResponse
 
-from .models          import Book, Category, Keyword, Today, Review, Like
-from library.models   import Library, LibraryBook
+from .models          import (
+        Book,
+        Category,
+        Keyword,
+        Today,
+        Review,
+        Like,
+)
+from library.models   import (
+        Library,
+        LibraryBook,
+)
 from user.models      import UserBook
 
 from .modules.numeric import get_reading_numeric
-
+from share.decorators import check_auth_decorator
 
 class TodayBookView(View):
     def get (self, request):
@@ -70,6 +80,7 @@ class RecentlyBookView(View):
 class BookDetailView(View):
     def get(self, request, book_id):
         try :
+            data = get_reading_numeric(book_id)
             book = Book.objects.select_related('category').prefetch_related('review_set').get(id=book_id)
             book_detail = {
                 'title'            : book.title,
@@ -84,8 +95,9 @@ class BookDetailView(View):
                 'description'      : book.description,
                 'category'         : book.category.name,
                 'review_count'     : book.review_set.count(),
-                'reder'            : book.userbook_set.count()
-                }
+                'reder'            : book.userbook_set.count(),
+                'numeric'          : data
+            }
             return JsonResponse({'book_detail':book_detail}, status=200)
         except Book.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_BOOK'}, status=400)
@@ -146,7 +158,6 @@ class SearchBookView(View):
 
         return JsonResponse({"message":"INVALID_REQUEST"}, status=400)
 
-
 class ReviewView(View):
     def post(self, request, book_id):
         data = json.loads(request.body)
@@ -195,7 +206,6 @@ class ReviewView(View):
         except Review.DoesNotExist:
             return JsonResponse({'message':'NOT_EXIST_REVIEW'}, status=400)
 
-
 class ReviewLikeView(View):
     def patch(self, request):
         data = json.loads(request.body)
@@ -211,7 +221,6 @@ class ReviewLikeView(View):
         except Like.DoesNotExist:
             Like.objects.create(user_id=user_id, review_id=review_id)
             return JsonResponse({'message':'SUCCESS'}, status=200)
-
 
 class BestSellerBookView(View):
     def get (self, request):
