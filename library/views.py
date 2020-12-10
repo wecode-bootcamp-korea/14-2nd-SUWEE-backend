@@ -1,23 +1,18 @@
 import json, requests
-from datetime import date
+from datetime         import date
 
 from django.http      import JsonResponse
 from django.views     import View
 from django.db.models import (
-        Sum,
-        Count,
-        Max,
+    Sum,
+    Count,
+    Max,
 )
 
-from library.models   import Library, LibraryBook
+from .models   import Library, LibraryBook
+from user.models      import User, UserBook
+from book.models      import Book
 from share.decorators import check_auth_decorator
-from user.models      import (
-        User,
-        UserBook,
-)
-from book.models      import (
-        Book,
-)
 
 
 class MyLibraryView(View):
@@ -46,6 +41,7 @@ class MyLibraryView(View):
         except KeyError:
             return JsonResponse({'message':'INVAILD_KEYS'}, status=400)
 
+
 class LibraryBookListView(View):
     @check_auth_decorator
     def get(self, request):
@@ -71,6 +67,7 @@ class LibraryBookListView(View):
                 "author" : library.book.author
             } for library in books]}
         return JsonResponse (book_list, status = 200)
+
 
 class StatisticsView(View):
     @check_auth_decorator
@@ -98,3 +95,22 @@ class StatisticsView(View):
                 result['recommand_book'] = list(books.values('id', 'title', 'image_url', 'author'))[0]
         
         return JsonResponse({"message":"SUCCESS", "data":result}, status=200)
+
+
+class LibraryInfoView(View):
+    @check_auth_decorator
+    def get(self, request):
+        user_id = request.user
+
+        library_info = {
+            "libraryInfo" : [{
+                "libraryName"  : library.name,
+                "libraryImage" : library.image_url,
+                "userName"     : library.user.nickname,
+                "userImage"    : library.user.image_url
+                    if library.user.image_url is not None
+                    else '',
+            } for library in Library.objects.filter(
+                user_id=user_id)]}
+
+        return JsonResponse (library_info, status = 200)
