@@ -9,6 +9,7 @@ from django.http        import JsonResponse
 from django.db          import transaction
 from django.views       import View
 from django.shortcuts   import redirect
+from django.db.models   import Q
 
 from .models import (
     User,
@@ -41,10 +42,14 @@ class SignUpView(View):
 
     def proc_post(self, data):
         try:
-            if not self.check_phonenumber_pattern(data['phone_number']):
-                return JsonResponse({"message":"INVALID_PHONE_NUMBER"}, status=400)
-            if not self.check_password_pattern(data['password']):
-                return JsonResponse({"message":"INVALID_PASSWORD"}, status=400)
+            valid_phone_number = self.check_phonenumber_pattern(data['phone_number'])
+            valid_password     = self.check_password_pattern(data['password'])
+            if not valid_phone_number or not valid_password:
+                return JsonResponse({"message":"INVALID_REQUEST"}, status=400)
+
+            if User.objects.filter(Q(phone_number=data['phone_number'])|
+                                    Q(nickname=data['nickname'])).exists():
+                return JsonResponse({"message":"INVALID_REQUEST"}, status=409)
 
             User.objects.create(
                         nickname     = data['nickname'],

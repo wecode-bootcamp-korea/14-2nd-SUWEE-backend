@@ -36,11 +36,14 @@ class UserTest(TestCase):
                         content_type = 'application/json'
                     )
         self.assertEqual(response.status_code, 201)        
+        
+        User.objects.last().delete()
 
     def test_user_signup_post_key_error(self):
         body = {
                 'phone'    : '01012347654',
                 'password' : 'SuweePW1?',
+                'nickname'     : 'goblin',
                 }
 
         response = self.client.post(
@@ -52,10 +55,11 @@ class UserTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'message':'KEY_ERROR'})
 
-    def test_user_signup_post_invalid_phone_number(self):
+    def test_user_signup_post_invalid_request_phone_number(self):
         body = {
                 'phone_number' : '010-1213-7654',
                 'password'     : 'SuweePW1?',
+                'nickname'     : 'goblin',
                 }
 
         response = self.client.post(
@@ -65,12 +69,13 @@ class UserTest(TestCase):
                     )
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'message':'INVALID_PHONE_NUMBER'})
+        self.assertEqual(response.json(), {'message':'INVALID_REQUEST'})
 
-    def test_user_signup_post_invalid_password(self):
+    def test_user_signup_post_invalid_request_password(self):
         body = {
                 'phone_number' : '01012347654',
                 'password'     : 'Suw',
+                'nickname'     : 'goblin',
                 }
 
         response = self.client.post(
@@ -80,7 +85,30 @@ class UserTest(TestCase):
                     )
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'message':'INVALID_PASSWORD'})
+        self.assertEqual(response.json(), {'message':'INVALID_REQUEST'})
+
+    def test_user_signup_post_invalid_request_duplicate(self):
+        User.objects.create(
+                phone_number = '01011112222', 
+                password     = 'Suweasdff!@#KJ@ePW1',
+                nickname     = 'goblin',
+        )
+
+        body = {
+                'phone_number' : '01011112222',
+                'password'     : 'Suweasdff!@#KJ@ePW1',
+                'nickname'     : 'goblin',
+                }
+
+        response =  self.client.post(
+                        '/user/sign_up',
+                        json.dumps(body),
+                        content_type = 'application/json'
+                    )
+
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(response.json(), {"message":"INVALID_REQUEST"})
+        User.objects.last().delete()
 
     def test_user_signin_post_success(self):
         body = {
