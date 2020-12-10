@@ -10,7 +10,6 @@ from .models import (
 )
 from .views  import SMSCheckView
 
-
 class UserTest(TestCase):
     def setUp(self):
         client = Client()
