@@ -21,8 +21,8 @@ import my_settings
 
 def generate_token(user_id):
     token = jwt.encode(
-                {'user_id':user_id}, 
-                my_settings.SECRET_KEY['secret'], 
+                {'user_id':user_id},
+                my_settings.SECRET_KEY['secret'],
                 algorithm=my_settings.JWT_ALGORITHM
             ).decode('utf-8')
 
@@ -31,12 +31,12 @@ def generate_token(user_id):
 class SignUpView(View):
     def check_password_pattern(self, password):
         check_password  = re.compile('^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$')
-            
+
         return check_password.match(password)
-    
+
     def check_phonenumber_pattern(self, phone_number):
         check_phone_num = re.compile('^[0-9]{11}$')
-        
+
         return check_phone_num.match(phone_number)
 
     def proc_post(self, data):
@@ -45,27 +45,27 @@ class SignUpView(View):
                 return JsonResponse({"message":"INVALID_PHONE_NUMBER"}, status=400)
             if not self.check_password_pattern(data['password']):
                 return JsonResponse({"message":"INVALID_PASSWORD"}, status=400)
-            
+
             User.objects.create(
                         nickname     = data['nickname'],
                         phone_number = data['phone_number'],
                         password     = bcrypt.hashpw(
-                                            data['password'].encode('utf-8'), 
+                                            data['password'].encode('utf-8'),
                                             bcrypt.gensalt()
-                                        ).decode(),                    
+                                        ).decode(),
                     )
-            
+
             return JsonResponse({"message":"SUCCESS"}, status=201)
 
         except KeyError:
             return JsonResponse({"message":"KEY_ERROR"}, status=400)
-    
+
     @transaction.atomic
     def post(self, request):
         data = json.loads(request.body)
-            
+
         return self.proc_post(data)
-                
+
 class SignInView(View):
     def post(self, request):
         try:
@@ -75,7 +75,7 @@ class SignInView(View):
             user         = User.objects.filter(phone_number = phone_number)
             if not user.exists():
                 return JsonResponse({"message":"USER_NOT_EXIST"}, status=400)
-            
+
             user = user.first()
             if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
                 return JsonResponse({"message":"USER_NOT_EXIST"}, status=400)
@@ -93,16 +93,16 @@ class SignInWithKakaoView(View):
         try:
             token         = request.headers['Authorization']
             profile       = requests.post(
-                                    "https://kapi.kakao.com/v2/user/me", 
+                                    "https://kapi.kakao.com/v2/user/me",
                                     headers = {'Authorization':f'Bearer {token}'},
                                     data    = 'property_keys=["kakao_account.email"]'
                                 )
             profile       = profile.json()
             user_id       = profile.get('id', None)
-            
+
             if not user_id:
                 return JsonResponse({"message":"INVALID_TOKEN"}, status=400)
-            
+
             kakao_account = profile.get('kakao_account')
             nickname      = kakao_account['profile'].get('nickname', '')
             thumbnail     = kakao_account['profile'].get('thumbnail_image_url', '')
@@ -118,7 +118,7 @@ class SignInWithKakaoView(View):
                                             }
                              )
             token         = generate_token(user[0].id)
-            
+
             return JsonResponse({"message":"SUCCESS", "access_token":token}, status=200)
 
         except KeyError:
