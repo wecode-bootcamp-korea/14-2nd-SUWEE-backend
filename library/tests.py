@@ -2,21 +2,15 @@ import jwt, json
 from unittest.mock import patch, MagicMock
 from random        import randint
 
-from django.test import TestCase, Client
+from django.test   import TestCase, Client
 
-from .models     import (
-        Library, 
-        LibraryBook,
-)
-from user.models import (
-        User,
-        UserBook,
-)
-from book.models import (
-        Book,
-        Category,
-        Review,
-        Like,
+from .models       import Library, LibraryBook
+from user.models   import User,UserBook
+from book.models   import (
+    Book,
+    Category,
+    Review,
+    Like,
 )
 
 import my_settings
@@ -67,6 +61,7 @@ class MyLibraryTestCase(TestCase):
             name      = self.DUMMY_LIBRARY_NAME,
             image_url = self.DUMMY_LIBRARY_IMAGE_URL
         )
+
 
 class LibraryBookListTest(TestCase):
     maxDiff = None
@@ -296,7 +291,6 @@ class LibraryBookListTest(TestCase):
 class LibraryTest(TestCase):
     def setUp(self):
         self.client = Client()
-        
         self.DUMMY_TITLE            = 'title'
         self.DUMMY_IMAGE_URL        = 'image_url'
         self.DUMMY_SUBTITLE         = 'sub'
@@ -382,3 +376,62 @@ class LibraryTest(TestCase):
 
         self.assertEquals(response.status_code, 200)
         self.assertNotEquals(response.json(), {})
+
+
+class LibraryInfoTest(TestCase):
+
+    def setUp(self):
+        client = Client()
+
+        body = {
+            "nickname"     : "burgundy",
+            "phone_number" : "01049532184",
+            "password"     : "a1234567890!"
+        }
+
+        response = client.post('/user/sign_up', json.dumps(body),
+                               content_type='application/json')
+
+        body = {
+            "phone_number" : "01049532184",
+            "password"     : "a1234567890!"
+        }
+
+        response = client.post('/user/sign_in', json.dumps(body),
+                               content_type='application/json')
+
+        self.token   = response.json()['access_token']
+        self.headers = {'HTTP_Authorization': self.token}
+        self.user    = User.objects.get(phone_number="01049532184")
+
+        update_user = User.objects.get(id=self.user.id)
+        update_user.nickname = "신라면"
+        update_user.save()
+
+        Library.objects.create(
+            id        = 1,
+            user_id   = self.user.id,
+            name      = "이사갈 서재",
+            image_url = ""
+        )
+
+    def tearDown(self):
+        User.objects.all().delete()
+        Library.objects.all().delete()
+
+    def test_libraryinfo_get_success(self):
+        client   = Client()
+        response = client.get('/1',
+                              content_type = 'application/json', **self.headers)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),
+                         {
+                             "libraryInfo":
+                             [{
+                                 "libraryName"  : "이사갈 서재",
+                                 "libraryimage" : "",
+                                 "userName"     : "신라면",
+                                 "userImage"    : ""
+                             }]
+                         })
