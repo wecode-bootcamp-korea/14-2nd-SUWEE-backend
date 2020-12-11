@@ -45,8 +45,8 @@ class LibraryBookListView(View):
         conditions = {
             1 : '-created_at',
             2 : 'book__title',
-            3 : 'book_author',
-            4 : '-book_publication_date'
+            3 : 'book__author',
+            4 : '-book__publication_date'
         }
 
         books = LibraryBook.objects.select_related(
