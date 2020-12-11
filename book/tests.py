@@ -51,20 +51,22 @@ class BookDetailTestCase(TestCase):
             nickname = 'hello'
         )
 
-        self.book = Book.objects.create(
-            id               = 1,
-            title            = self.DUMMY_TITLE,
-            image_url        = self.DUMMY_IMAGE_URL,
-            subtitle         = self.DUMMY_SUBTITLE,
-            company          = self.DUMMY_COMPANY,
-            author           = self.DUMMY_AUTHOR,
-            contents         = self.DUMMY_CONTENTS,
-            company_review   = self.DUMMY_COMPANY_REVIEW,
-            page             = self.DUMMY_PAGE,
-            publication_date = self.DUMMY_PUBLICATION_DATE,
-            description      = self.DUMMY_DESCRIPTION,
-            category_id      = 1,
-        )
+        books = [
+                Book(id              = i,
+                    title            = self.DUMMY_TITLE,
+                    image_url        = f'{self.DUMMY_IMAGE_URL}_{i}',
+                    subtitle         = self.DUMMY_SUBTITLE,
+                    company          = self.DUMMY_COMPANY,
+                    author           = self.DUMMY_AUTHOR,
+                    contents         = self.DUMMY_CONTENT,
+                    company_review   = self.DUMMY_COMPANY_REVIEW,
+                    page             = self.DUMMY_PAGE,
+                    publication_date = self.DUMMY_PUBLICATION_DATE,
+                    description      = self.DUMMY_DESCRIPTION,
+                    category_id      = self.category.id) for i in range(1, 101)]
+        
+        Book.objects.bulk_create(books)
+
         self.reivew = Review.objects.create(
             id   = 1,
             user_id = 1,
@@ -93,14 +95,13 @@ class BookDetailTestCase(TestCase):
         pass
 
     def test_book_get_success(self):
-
         response = self.client.get(self.URL)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(),{
             'book_detail': {
                 'title'            : self.DUMMY_TITLE,
                 'subtitle'         : self.DUMMY_SUBTITLE,
-                'image_url'        : self.DUMMY_IMAGE_URL,
+                'image_url'        : f'{self.DUMMY_IMAGE_URL}_1',
                 'company'          : self.DUMMY_COMPANY,
                 'author'           : self.DUMMY_AUTHOR,
                 'contents'         : self.DUMMY_CONTENTS,
@@ -114,11 +115,41 @@ class BookDetailTestCase(TestCase):
                 }})
 
     def test_book_get_fail(self):
-
-        response = self.client.get('/books/2')
+        response = self.client.get('/books/200000')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),{'message':'NOT_EXIST_BOOK'})
 
+    def test_randingpage_get_with_maximum_success(self):
+        response = self.client.get('/books/randing_page?maximum=100')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['books']), 100)
+
+        index = 1
+        for book in Book.objects.exclude(image_url='')[0:10]:
+            self.assertEqual(book.title, self.DUMMY_TITLE)
+            self.assertEqual(book.image_url, f'{self.DUMMY_IMAGE_URL}_{index}')
+            self.assertEqual(book.author, self.DUMMY_AUTHOR)
+            self.assertEqual(book.contents, self.DUMMY_CONTENT)
+            self.assertEqual(book.company, self.DUMMY_COMPANY)
+            self.assertEqual(book.description, self.DUMMY_DESCRIPTION)
+            index += 1 
+
+    def test_randingpage_get_success(self):
+        response = self.client.get('/books/randing_page')
+
+        self.assertEqual(response.status_code, 200 )
+        self.assertEqual(len(response.json()['books']), 60)
+
+        index = 1
+        for book in Book.objects.exclude(image_url='')[0:10]:
+            self.assertEqual(book.title, self.DUMMY_TITLE)
+            self.assertEqual(book.image_url, f'{self.DUMMY_IMAGE_URL}_{index}')
+            self.assertEqual(book.author, self.DUMMY_AUTHOR)
+            self.assertEqual(book.contents, self.DUMMY_CONTENT)
+            self.assertEqual(book.company, self.DUMMY_COMPANY)
+            self.assertEqual(book.description, self.DUMMY_DESCRIPTION)
+            index += 1            
 
 class CommingSoonBookTest(TestCase):
     maxDiff = None
