@@ -161,7 +161,7 @@ class CommingSoonBookTest(TestCase):
             company          = "맛밤",
             author           = "고수희",
             page             = 804,
-            publication_date = "2020-12-10"
+            publication_date = "2020-12-11"
         )
 
         Book.objects.create(
