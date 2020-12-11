@@ -151,29 +151,6 @@ class SearchBookView(View):
 
         return JsonResponse({"message":"INVALID_REQUEST"}, status=400)
 
-class BookDetailView(View):
-    def get(self, request, book_id):
-        try :
-            book = Book.objects.select_related('category').prefetch_related('review_set').get(id=book_id)
-            book_detail = {
-                'title'            : book.title,
-                'subtitle'         : book.subtitle,
-                'image_url'        : book.image_url,
-                'company'          : book.company,
-                'author'           : book.author,
-                'contents'         : book.contents,
-                'company_review'   : book.company_review,
-                'page'             : book.page,
-                'publication_date' : book.publication_date,
-                'description'      : book.description,
-                'category'         : book.category.name,
-                'review_count'     : book.review_set.count(),
-                'reder'            : book.userbook_set.count()
-                }
-            return JsonResponse({'book_detail':book_detail}, status=200)
-        except Book.DoesNotExist:
-            return JsonResponse({'message':'NOT_EXIST_BOOK'}, status=400)
-
 class ReviewView(View):
     @check_auth_decorator
     def post(self, request, book_id):
@@ -237,7 +214,6 @@ class ReviewLikeView(View):
             Like.objects.create(user_id=user_id, review_id=review_id)
             return JsonResponse({'message':'SUCCESS'}, status=200)
 
-
 class BestSellerBookView(View):
     def get (self, request):
         keyword = request.GET.get('keyword', '1')
@@ -264,7 +240,6 @@ class BestSellerBookView(View):
             "author" : book.book.author
         } for book in books]
         return JsonResponse ({"bestSellerBook":book_list}, status=200)
-
 
 class RecommendBookView(View):
     def get (self, request):
@@ -296,3 +271,16 @@ class RecommendBookView(View):
         if not book_list:
             return JsonResponse ({"message" : "NO_BOOKS"}, status=400)
         return JsonResponse ({"recommendBook":book_list}, status=200)
+        
+class LandingPageView(View):
+    def get(self, request):
+        maximum_count = int(request.GET.get('maximum', 60))
+
+        result = [
+            {
+                'id'        : book.id,
+                'image_url' : book.image_url
+            } for book in Book.objects.exclude(image_url='')[0:maximum_count]
+        ]
+
+        return JsonResponse({"message":"SUCCESS", "books":result}, status=200)
