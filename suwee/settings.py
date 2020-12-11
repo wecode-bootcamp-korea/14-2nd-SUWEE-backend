@@ -147,3 +147,7 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',
 )
+
+
+IAMPORT_KEY = my_settings.IAMPORT_KEY
+IAMPORT_SECRET = my_settings.IAMPORT_SECRET

@@ -42,7 +42,6 @@ class SignUpView(View):
 
     def proc_post(self, data):
         try:
-<<<<<<< HEAD
             valid_phone_number = self.check_phonenumber_pattern(data['phone_number'])
             valid_password     = self.check_password_pattern(data['password'])
             if not valid_phone_number or not valid_password:
@@ -51,12 +50,6 @@ class SignUpView(View):
             if User.objects.filter(Q(phone_number=data['phone_number'])|
                                     Q(nickname=data['nickname'])).exists():
                 return JsonResponse({"message":"INVALID_REQUEST"}, status=409)
-=======
-            if not self.check_phonenumber_pattern(data['phone_number']):
-                return JsonResponse({"message":"INVALID_PHONE_NUMBER"}, status=400)
-            if not self.check_password_pattern(data['password']):
-                return JsonResponse({"message":"INVALID_PASSWORD"}, status=400)
->>>>>>> 98bc977 (ADD :Mylibraryview 작성)
 
             User.objects.create(
                         nickname     = data['nickname'],
