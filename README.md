@@ -57,7 +57,7 @@
 - 프로젝트 후기
   - [고수희](https://velog.io/@burgundy/Project-Suwees-Library-%ED%9B%84%EA%B8%B0)
   - [정현석](https://velog.io/@cs982607/2%EC%B0%A8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9B%84%EA%B8%B0)
-  - [백승진]
+  - [백승진](https://velog.io/@jinybear/2%EC%B0%A8-project-%ED%9B%84%EA%B8%B0-Suwee%EC%9D%98-%EC%84%9C%EC%9E%AC)
 
 - Repository
   - [프론트엔드](https://github.com/wecode-bootcamp-korea/14-2nd-SUWEE-frontend)
