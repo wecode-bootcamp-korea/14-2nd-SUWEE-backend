@@ -83,10 +83,7 @@
   
 - API Documentation
   - https://documenter.getpostman.com/view/13391325/TVmMhdrD
-  
-- project Flow
-  - 전체 Flow      
-  - 회원가입 & 로그인 
+ 
 
 ## License
 
