@@ -21,6 +21,38 @@ from .modules.numeric   import (
         get_reading_numeric,
 )
 
+from library.models   import Library, LibraryBook
+from user.models import UserBook, User
+
+from .models            import (
+        Book,
+        Category,
+        Review,
+        Like
+)
+from user.models        import (
+        User,
+        UserBook,
+)
+from .modules.numeric   import (
+        get_reading_numeric,
+)
+
+from .models            import (
+        Book,
+        Category,
+        Review,
+        Like,
+        Keyword,
+        Today
+)
+from user.models        import (
+        User,
+        UserBook,
+)
+from .modules.numeric   import (
+        get_reading_numeric,
+)
 
 class BookDetailTestCase(TestCase):
     maxDiff = None
@@ -269,7 +301,6 @@ class BookTest(TestCase):
                         }
                     )
         datas    = response.json()['books']
-
         for data in datas:
             result = target in data['title'] or target in data['author'] or target in data['company']
             self.assertTrue(result)
