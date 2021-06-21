@@ -78,6 +78,7 @@ class RecentlyBookView(View):
 class BookDetailView(View):
     def get(self, request, book_id):
         try :
+            data = get_reading_numeric(book_id)
             book = Book.objects.select_related('category').prefetch_related('review_set').get(id=book_id)
             book_detail = {
                 'title'            : book.title,
@@ -92,7 +93,8 @@ class BookDetailView(View):
                 'description'      : book.description,
                 'category'         : book.category.name,
                 'review_count'     : book.review_set.count(),
-                'reder'            : book.userbook_set.count()
+                'reder'            : book.userbook_set.count(),
+                'numeric'          : data
                 }
             return JsonResponse({'book_detail':book_detail, 'like':False}, status=200)
         except Book.DoesNotExist:
@@ -271,7 +273,7 @@ class RecommendBookView(View):
         if not book_list:
             return JsonResponse ({"message" : "NO_BOOKS"}, status=400)
         return JsonResponse ({"recommendBook":book_list}, status=200)
-        
+
 class LandingPageView(View):
     def get(self, request):
         maximum_count = int(request.GET.get('maximum', 60))

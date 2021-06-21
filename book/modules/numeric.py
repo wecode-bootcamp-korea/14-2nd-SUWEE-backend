@@ -11,7 +11,12 @@ from user.models import UserBook
 def get_reading_numeric(book_id):
     user_books = UserBook.objects.select_related('book').filter(book_id=book_id)
     if not user_books.exists():
-        return {'message':'NOT_EXIST'} 
+        return {    
+            'avg_finish'                        : 0.0,
+            'expected_reading_minutes'          : 0,
+            'category_avg_finish'               : 0.0,
+            'category_expected_reading_minutes' : 0,
+            } 
 
     # 완독할 확률   = 책 완독한 독자/책 전체 독자 * 100 (완독여부는 읽은 page/책 총 page)
     # 완독 예상시간 = 책 완독자 총 reading time / 책 완독자 수 
