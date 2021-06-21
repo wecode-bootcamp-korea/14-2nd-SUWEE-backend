@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'user',
+    'library',
+    'book',
+    'payment'
 ]
 
 MIDDLEWARE = [
@@ -80,9 +84,6 @@ WSGI_APPLICATION = 'suwee.wsgi.application'
 DATABASES = my_settings.DATABASES
 SECRET_KEY = my_settings.SECRET_KEY
 
-
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -113,7 +114,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -146,3 +147,7 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',
 )
+
+
+IAMPORT_KEY = my_settings.IAMPORT_KEY
+IAMPORT_SECRET = my_settings.IAMPORT_SECRET
