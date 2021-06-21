@@ -16,6 +16,9 @@ from .models import (
     UserBook,
     SMSAuthRequest,
 )
+from library.models import (
+    Library,
+)
 
 import my_settings
 
@@ -51,7 +54,7 @@ class SignUpView(View):
                                     Q(nickname=data['nickname'])).exists():
                 return JsonResponse({"message":"INVALID_REQUEST"}, status=409)
 
-            User.objects.create(
+            user = User.objects.create(
                         nickname     = data['nickname'],
                         phone_number = data['phone_number'],
                         password     = bcrypt.hashpw(
@@ -59,7 +62,10 @@ class SignUpView(View):
                                             bcrypt.gensalt()
                                         ).decode(),
                     )
-
+            
+            if not Library.objects.filter(user_id = user.id):
+                Library.objects.create(user_id = user.id, name = user.nickname, image_url = '')
+                        
             return JsonResponse({"message":"SUCCESS"}, status=201)
 
         except KeyError:
@@ -103,27 +109,36 @@ class SignInWithKakaoView(View):
                                     data    = 'property_keys=["kakao_account.email"]'
                                 )
             profile       = profile.json()
-            user_id       = profile.get('id', None)
+            kakao_id       = profile.get('id', None)
 
-            if not user_id:
+            if not kakao_id:
                 return JsonResponse({"message":"INVALID_TOKEN"}, status=400)
 
             kakao_account = profile.get('kakao_account')
             nickname      = kakao_account['profile'].get('nickname', '')
             thumbnail     = kakao_account['profile'].get('thumbnail_image_url', '')
             email         = kakao_account.get('email', '')
-            user          = User.objects.update_or_create(
+            obj, created  = User.objects.update_or_create(
                                 email    = email,
                                 defaults = {
-                                            'kakao_id'  : str(user_id),
+                                            'kakao_id'  : str(kakao_id),
                                             'nickname'  : nickname,
                                             'image_url' : thumbnail,
                                             'updated_at': datetime.now(),
                                             'email'     : email,
                                             }
                              )
-            token         = generate_token(user[0].id)
-
+            user = None
+            if obj:
+                user = obj
+            elif created:
+                user = created
+            
+            token = generate_token(user.id)
+             
+            if not Library.objects.filter(user__kakao_id = str(kakao_id)):
+                Library.objects.create(user_id = user.id, name = user.nickname, image_url = '')
+            
             return JsonResponse({"message":"SUCCESS", "access_token":token}, status=200)
 
         except KeyError:

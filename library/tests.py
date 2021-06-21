@@ -1,10 +1,18 @@
 import jwt, json
-from django.test   import TestCase, Client
 from unittest.mock import patch, MagicMock
+from random        import randint
 
-from book.models   import Book, Category, Review, Like
-from user.models   import UserBook, User
+from django.test   import TestCase, Client
+
 from .models       import Library, LibraryBook
+from user.models   import User,UserBook
+from book.models   import (
+    Book,
+    Category,
+    Review,
+    Like,
+)
+
 import my_settings
 
 
@@ -50,6 +58,9 @@ class MyLibraryTestCase(TestCase):
         )
         self.library2 = Library.objects.create(
             user_id   = self.user2.id,
+            name      = self.DUMMY_LIBRARY_NAME,
+            image_url = self.DUMMY_LIBRARY_IMAGE_URL
+        )
 
 
 class LibraryBookListTest(TestCase):
@@ -276,3 +287,151 @@ class LibraryBookListTest(TestCase):
                              "libraryBook":[]
                          }
                         )
+
+class LibraryTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.DUMMY_TITLE            = 'title'
+        self.DUMMY_IMAGE_URL        = 'image_url'
+        self.DUMMY_SUBTITLE         = 'sub'
+        self.DUMMY_COMPANY          = 'company'
+        self.DUMMY_AUTHOR           = 'author'
+        self.DUMMY_CONTENT          = 'content'
+        self.DUMMY_COMPANY_REVIEW   = 'company_review'
+        self.DUMMY_PAGE             = 1
+        self.DUMMY_PUBLICATION_DATE = '2020-02-22'
+        self.DUMMY_DESCRIPTION      = 'description'
+        self.DUMMY_REDER            = 10
+
+        self.category = Category.objects.create(
+            id   = 1,
+            name = 'category'
+        )
+
+        body       = {
+                        'phone_number':'01027287069',
+                        'password':'Passw0rd!',
+                        'nickname':'추린'
+                     }
+        response   = self.client.post(
+                            '/user/sign_up',
+                            json.dumps(body),
+                            content_type='application/json',
+                        )
+
+        self.user  = User.objects.get(phone_number='01027287069')
+        body       = {
+                        'phone_number':self.user.phone_number,
+                        'password':'Passw0rd!',
+                     }
+
+        response   = self.client.post(
+                            '/user/sign_in',
+                            json.dumps(body),
+                            content_type='application/json',
+                        )
+
+        self.token = response.json()['access_token']
+
+        self.category = Category.objects.create(
+            name = 'category'
+        )
+
+        books = [
+                Book(
+                    id               = i,
+                    title            = self.DUMMY_TITLE,
+                    image_url        = f'{self.DUMMY_IMAGE_URL}_{i}',
+                    subtitle         = self.DUMMY_SUBTITLE,
+                    company          = self.DUMMY_COMPANY,
+                    author           = self.DUMMY_AUTHOR,
+                    contents         = self.DUMMY_CONTENT,
+                    company_review   = self.DUMMY_COMPANY_REVIEW,
+                    page             = self.DUMMY_PAGE,
+                    publication_date = self.DUMMY_PUBLICATION_DATE,
+                    description      = self.DUMMY_DESCRIPTION,
+                    category_id      = self.category.id) for i in range(1, 60)]
+
+        Book.objects.bulk_create(books)
+
+        UserBook.objects.bulk_create(
+                [
+                    UserBook(
+                        user_id = self.user.id,
+                        book_id = i, 
+                        page=randint(0, 300), 
+                        time=randint(10, 400)
+                        ) for i in range(1, 5)
+                ]
+        )
+
+
+    def tearDown(self):
+        Book.objects.all().delete()
+
+    def test_statistic_view_get_success(self):
+        headers = {'HTTP_Authorization':self.token}
+        response = self.client.get('/library/statistics',
+                                    **headers)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertNotEquals(response.json(), {})
+
+
+class LibraryInfoTest(TestCase):
+
+    def setUp(self):
+        client = Client()
+
+        body = {
+            "nickname"     : "burgundy",
+            "phone_number" : "01049532184",
+            "password"     : "a1234567890!"
+        }
+
+        response = client.post('/user/sign_up', json.dumps(body),
+                               content_type='application/json')
+
+        body = {
+            "phone_number" : "01049532184",
+            "password"     : "a1234567890!"
+        }
+
+        response = client.post('/user/sign_in', json.dumps(body),
+                               content_type='application/json')
+
+        self.token   = response.json()['access_token']
+        self.headers = {'HTTP_Authorization': self.token}
+        self.user    = User.objects.get(phone_number="01049532184")
+
+        update_user = User.objects.get(id=self.user.id)
+        update_user.nickname = "신라면"
+        update_user.save()
+
+        Library.objects.create(
+            id        = 1,
+            user_id   = self.user.id,
+            name      = "이사갈 서재",
+            image_url = ""
+        )
+
+    def tearDown(self):
+        User.objects.all().delete()
+        Library.objects.all().delete()
+
+    def test_libraryinfo_get_success(self):
+        client   = Client()
+        response = client.get('/1',
+                              content_type = 'application/json', **self.headers)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),
+                         {
+                             "libraryInfo":
+                             [{
+                                 "libraryName"  : "이사갈 서재",
+                                 "libraryimage" : "",
+                                 "userName"     : "신라면",
+                                 "userImage"    : ""
+                             }]
+                         })

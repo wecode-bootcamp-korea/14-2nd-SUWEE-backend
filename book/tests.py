@@ -21,7 +21,7 @@ from .modules.numeric   import (
         get_reading_numeric,
 )
 
- 
+
 class BookDetailTestCase(TestCase):
     maxDiff = None
     def setUp(self):
@@ -51,20 +51,22 @@ class BookDetailTestCase(TestCase):
             nickname = 'hello'
         )
 
-        self.book = Book.objects.create(
-            id               = 1,
-            title            = self.DUMMY_TITLE,
-            image_url        = self.DUMMY_IMAGE_URL,
-            subtitle         = self.DUMMY_SUBTITLE,
-            company          = self.DUMMY_COMPANY,
-            author           = self.DUMMY_AUTHOR,
-            contents         = self.DUMMY_CONTENTS,
-            company_review   = self.DUMMY_COMPANY_REVIEW,
-            page             = self.DUMMY_PAGE,
-            publication_date = self.DUMMY_PUBLICATION_DATE,
-            description      = self.DUMMY_DESCRIPTION,
-            category_id      = 1,
-        )
+        books = [
+                Book(id              = i,
+                    title            = self.DUMMY_TITLE,
+                    image_url        = f'{self.DUMMY_IMAGE_URL}_{i}',
+                    subtitle         = self.DUMMY_SUBTITLE,
+                    company          = self.DUMMY_COMPANY,
+                    author           = self.DUMMY_AUTHOR,
+                    contents         = self.DUMMY_CONTENT,
+                    company_review   = self.DUMMY_COMPANY_REVIEW,
+                    page             = self.DUMMY_PAGE,
+                    publication_date = self.DUMMY_PUBLICATION_DATE,
+                    description      = self.DUMMY_DESCRIPTION,
+                    category_id      = self.category.id) for i in range(1, 101)]
+
+        Book.objects.bulk_create(books)
+
         self.reivew = Review.objects.create(
             id   = 1,
             user_id = 1,
@@ -93,14 +95,13 @@ class BookDetailTestCase(TestCase):
         pass
 
     def test_book_get_success(self):
-
         response = self.client.get(self.URL)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(),{
             'book_detail': {
                 'title'            : self.DUMMY_TITLE,
                 'subtitle'         : self.DUMMY_SUBTITLE,
-                'image_url'        : self.DUMMY_IMAGE_URL,
+                'image_url'        : f'{self.DUMMY_IMAGE_URL}_1',
                 'company'          : self.DUMMY_COMPANY,
                 'author'           : self.DUMMY_AUTHOR,
                 'contents'         : self.DUMMY_CONTENTS,
@@ -114,11 +115,41 @@ class BookDetailTestCase(TestCase):
                 }})
 
     def test_book_get_fail(self):
-
-        response = self.client.get('/books/2')
+        response = self.client.get('/books/200000')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(),{'message':'NOT_EXIST_BOOK'})
 
+    def test_randingpage_get_with_maximum_success(self):
+        response = self.client.get('/books/randing_page?maximum=100')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['books']), 100)
+
+        index = 1
+        for book in Book.objects.exclude(image_url='')[0:10]:
+            self.assertEqual(book.title, self.DUMMY_TITLE)
+            self.assertEqual(book.image_url, f'{self.DUMMY_IMAGE_URL}_{index}')
+            self.assertEqual(book.author, self.DUMMY_AUTHOR)
+            self.assertEqual(book.contents, self.DUMMY_CONTENT)
+            self.assertEqual(book.company, self.DUMMY_COMPANY)
+            self.assertEqual(book.description, self.DUMMY_DESCRIPTION)
+            index += 1 
+
+    def test_randingpage_get_success(self):
+        response = self.client.get('/books/randing_page')
+
+        self.assertEqual(response.status_code, 200 )
+        self.assertEqual(len(response.json()['books']), 60)
+
+        index = 1
+        for book in Book.objects.exclude(image_url='')[0:10]:
+            self.assertEqual(book.title, self.DUMMY_TITLE)
+            self.assertEqual(book.image_url, f'{self.DUMMY_IMAGE_URL}_{index}')
+            self.assertEqual(book.author, self.DUMMY_AUTHOR)
+            self.assertEqual(book.contents, self.DUMMY_CONTENT)
+            self.assertEqual(book.company, self.DUMMY_COMPANY)
+            self.assertEqual(book.description, self.DUMMY_DESCRIPTION)
+            index += 1
 
 class CommingSoonBookTest(TestCase):
     maxDiff = None
@@ -130,7 +161,7 @@ class CommingSoonBookTest(TestCase):
             company          = "맛밤",
             author           = "고수희",
             page             = 804,
-            publication_date = "2020-12-10"
+            publication_date = "2020-12-11"
         )
 
         Book.objects.create(
@@ -198,7 +229,7 @@ class BookTest(TestCase):
         Book.objects.create(id=3, title='광수 생각', page=250, author="김광수", publication_date=datetime.now(), category_id=1, company='(주)늘빛')
         Book.objects.create(id=4, title='결전! 주식투자 2020', page=600, author="마광수", publication_date=datetime.now(), category_id=1, company='(주)한빛IT')
         Book.objects.create(id=5, title='니가 날?', page=100, author="마광수", publication_date=datetime.now(), category_id=2, company='ABCD')
-        
+
         UserBook.objects.bulk_create([
             UserBook(user_id=1, book_id=1, page=129, time=130),
             UserBook(user_id=2, book_id=1, page=300, time=260),
@@ -217,9 +248,9 @@ class BookTest(TestCase):
     def test_get_numeric_reading_success(self):
         data = get_reading_numeric(1)
 
-        self.assertEqual(data['avg_finish'], 25.0)                                          
-        self.assertEqual(data['expected_reading_minutes'], 260)                            
-        self.assertEqual(data['category_avg_finish'], 3/7)                          
+        self.assertEqual(data['avg_finish'], 25.0)
+        self.assertEqual(data['expected_reading_minutes'], 260)
+        self.assertEqual(data['category_avg_finish'], 3/7)
         self.assertEqual(data['category_expected_reading_minutes'], int((260+230+90)/3)) 
 
     def test_get_numeric_reading_not_exist(self):
@@ -238,11 +269,11 @@ class BookTest(TestCase):
                         }
                     )
         datas    = response.json()['books']
-        
+
         for data in datas:
             result = target in data['title'] or target in data['author'] or target in data['company']
             self.assertTrue(result)
-     
+
     def test_get_searched_books_with_author(self):
         target   = '고수희'
         response = self.client.get(
@@ -250,7 +281,7 @@ class BookTest(TestCase):
                         {'author':target}
                     )
         datas    = response.json()['books']
-       
+
         self.assertEqual(len(datas), 1)
         self.assertEqual(datas[0]['title'], '그렇게 개발자가 되어간다')
 
@@ -264,7 +295,7 @@ class BookTest(TestCase):
 
         self.assertEqual(len(datas), 1)
         self.assertEqual(datas[0]['title'], '결전! 주식투자 2020')
-    
+
     def test_get_searched_books_with_company(self):
         target   = '빛'
         response = self.client.get(
@@ -277,7 +308,7 @@ class BookTest(TestCase):
         self.assertEqual(datas[0]['company'], '늘빛출판사')
         self.assertEqual(datas[1]['company'], '(주)늘빛')
         self.assertEqual(datas[2]['company'], '(주)한빛IT')
-        
+
     def test_get_searched_books_invalid_request(self):
         response = self.client.get(
                         '/books/search',  
@@ -309,7 +340,7 @@ class ReviewTestCase(TestCase):
         self.DUMMY_REVIEW_CONTENTS  = 'GOOD'
         self.DUMMY_REVIEW_DATE      = '2020.12.01'
 
- 
+
         self.user = User.objects.create(
             id   = 1,
             nickname  = self.DUMMY_NICKNAME,
@@ -526,7 +557,7 @@ class ReviewLikeTestCase(TestCase):
         }
 
         response = self.client.patch(self.URL, request, content_type='application/json', **self.header)
-        self.assertEqual(response.json(),{'message':'CANCEL'})
+        self.assertEqual(response.json(),{'message':'CANCEL','like':False})
         self.assertEqual(response.status_code, 200)
 
     def test_reviewlike_patch_not_exist_review(self):
