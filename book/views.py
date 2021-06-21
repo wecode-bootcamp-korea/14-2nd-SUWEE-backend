@@ -20,7 +20,6 @@ from library.models   import (
         LibraryBook,
 )
 from user.models      import UserBook
-
 from .modules.numeric import get_reading_numeric
 from share.decorators import check_auth_decorator
 
@@ -174,6 +173,8 @@ class ReviewView(View):
 
     def get(self, request, book_id):
         try:
+            user_id = data['user_id']
+            reviews = Review.objects.select_related('user').get(user_id=user_id)
             reviews = Book.objects.get(id=book_id).review_set.all()
             review_list = [{
                 'review_id'  : review.id,
