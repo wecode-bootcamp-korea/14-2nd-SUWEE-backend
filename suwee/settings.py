@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
  #    'django.contrib.admin',
-    'django.contrib.auth',
+ #    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -84,9 +84,6 @@ WSGI_APPLICATION = 'suwee.wsgi.application'
 DATABASES = my_settings.DATABASES
 SECRET_KEY = my_settings.SECRET_KEY
 
-
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -117,7 +114,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
